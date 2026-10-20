@@ -1,0 +1,785 @@
+
+ /----------------------------------------------------------------------------\
+ |                                                                            |
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |                                                                            |
+ |  Copyright (C) 2012 - 2020  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |                                                                            |
+ |  Permission to use, copy, modify, and/or distribute this software for any  |
+ |  purpose with or without fee is hereby granted, provided that the above    |
+ |  copyright notice and this permission notice appear in all copies.         |
+ |                                                                            |
+ |  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  |
+ |  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          |
+ |  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   |
+ |  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    |
+ |  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     |
+ |  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   |
+ |  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            |
+ |                                                                            |
+ \----------------------------------------------------------------------------/
+
+ Yosys 0.33 (git sha1 2584903a060)
+
+
+-- Running command `read_verilog -formal rtl/siege_tile.v rtl/refinement.v; chparam -set BITS 4 -set ACC 16 -set PIPE 1 refinement; prep -top refinement -flatten; memory_map; opt; sat -seq 4 -tempinduct -maxsteps 12 -prove-asserts -set-assumes -verify -timeout 120' --
+
+1. Executing Verilog-2005 frontend: rtl/siege_tile.v
+Parsing formal Verilog input from `rtl/siege_tile.v' to AST representation.
+Generating RTLIL representation for module `\siege_tile'.
+Warning: Replacing memory \pipelined.prod with list of registers. See rtl/siege_tile.v:45
+Warning: Replacing memory \accum with list of registers. See rtl/siege_tile.v:67
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: rtl/refinement.v
+Parsing formal Verilog input from `rtl/refinement.v' to AST representation.
+Generating RTLIL representation for module `\refinement'.
+Successfully finished Verilog frontend.
+Parameter \BITS = 4
+Parameter \ACC = 16
+Parameter \PIPE = 1
+
+3. Executing AST frontend in derive mode using pre-parsed AST for module `\refinement'.
+Parameter \BITS = 4
+Parameter \ACC = 16
+Parameter \PIPE = 1
+Generating RTLIL representation for module `$paramod$c04420ca2e16fcbec17b458f513dc183ab184191\refinement'.
+
+4. Executing PREP pass.
+
+4.1. Executing HIERARCHY pass (managing design hierarchy).
+
+4.1.1. Analyzing design hierarchy..
+Top module:  \refinement
+Used module:     \siege_tile
+Parameter \P = 1
+Parameter \BITS = 4
+Parameter \ACC = 16
+Parameter \PIPE = 1
+
+4.1.2. Executing AST frontend in derive mode using pre-parsed AST for module `\siege_tile'.
+Parameter \P = 1
+Parameter \BITS = 4
+Parameter \ACC = 16
+Parameter \PIPE = 1
+Generating RTLIL representation for module `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile'.
+Warning: Replacing memory \pipelined.prod with list of registers. See rtl/siege_tile.v:45
+Warning: Replacing memory \accum with list of registers. See rtl/siege_tile.v:67
+
+4.1.3. Analyzing design hierarchy..
+Top module:  \refinement
+Used module:     $paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile
+
+4.1.4. Analyzing design hierarchy..
+Top module:  \refinement
+Used module:     $paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile
+Removing unused module `\siege_tile'.
+Removed 1 unused modules.
+Module refinement directly or indirectly contains formal properties -> setting "keep" attribute.
+Module $paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile directly or indirectly contains formal properties -> setting "keep" attribute.
+
+4.2. Executing PROC pass (convert processes to netlists).
+
+4.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+4.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$rtl/refinement.v:15$167 in module refinement.
+Marked 2 switch rules as full_case in process $proc$rtl/siege_tile.v:39$243 in module $paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.
+Marked 2 switch rules as full_case in process $proc$rtl/siege_tile.v:64$206 in module $paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.
+Removed a total of 0 dead cases.
+
+4.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 2 redundant assignments.
+Promoted 20 assignments to connections.
+
+4.2.4. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `\refinement.$proc$rtl/refinement.v:14$187'.
+  Set init value: \past_valid = 1'0
+Found init rule in `\refinement.$proc$rtl/refinement.v:0$188'.
+  Set init value: $formal$rtl/refinement.v:17$157_EN = 1'0
+Found init rule in `\refinement.$proc$rtl/refinement.v:0$190'.
+  Set init value: $formal$rtl/refinement.v:18$158_EN = 1'0
+Found init rule in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$263'.
+  Set init value: $formal$rtl/siege_tile.v:92$201_EN = 1'0
+Found init rule in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$261'.
+  Set init value: $formal$rtl/siege_tile.v:91$200_EN = 1'0
+Found init rule in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$259'.
+  Set init value: $formal$rtl/siege_tile.v:89$199_EN = 1'0
+Found init rule in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$257'.
+  Set init value: $formal$rtl/siege_tile.v:86$198_EN = 1'0
+Found init rule in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$255'.
+  Set init value: $formal$rtl/siege_tile.v:85$197_EN = 1'0
+Found init rule in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$253'.
+  Set init value: $formal$rtl/siege_tile.v:83$196_EN = 1'0
+Found init rule in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:80$252'.
+  Set init value: \past_valid = 1'0
+
+4.2.5. Executing PROC_ARST pass (detect async resets in processes).
+
+4.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~19 debug messages>
+
+4.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\refinement.$proc$rtl/refinement.v:15$167'.
+     1/8: $0\pv[0:0]
+     2/8: $0$formal$rtl/refinement.v:17$157_EN[0:0]$169
+     3/8: $0$formal$rtl/refinement.v:17$157_CHECK[0:0]$168
+     4/8: $0$formal$rtl/refinement.v:18$158_EN[0:0]$171
+     5/8: $0$formal$rtl/refinement.v:18$158_CHECK[0:0]$170
+     6/8: $0\pf[0:0]
+     7/8: $0\pending[15:0]
+     8/8: $0\expected[15:0]
+Creating decoders for process `\refinement.$proc$rtl/refinement.v:14$187'.
+Creating decoders for process `\refinement.$proc$rtl/refinement.v:0$188'.
+Creating decoders for process `\refinement.$proc$rtl/refinement.v:0$190'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$263'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$261'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$259'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$257'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$255'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$253'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:80$252'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$244'.
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+     1/6: $2\pipelined.x[31:0]
+     2/6: $0\pipelined.pv[0:0]
+     3/6: $1\pipelined.x[31:0]
+     4/6: $0\pipelined.prod[0][7:0]
+     5/6: $0\pipelined.pl[0:0]
+     6/6: $0\pipelined.pf[0:0]
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+     1/12: $0$formal$rtl/siege_tile.v:83$196_EN[0:0]$225
+     2/12: $0$formal$rtl/siege_tile.v:83$196_CHECK[0:0]$226
+     3/12: $0$formal$rtl/siege_tile.v:85$197_EN[0:0]$223
+     4/12: $0$formal$rtl/siege_tile.v:85$197_CHECK[0:0]$224
+     5/12: $0$formal$rtl/siege_tile.v:86$198_EN[0:0]$221
+     6/12: $0$formal$rtl/siege_tile.v:86$198_CHECK[0:0]$222
+     7/12: $0$formal$rtl/siege_tile.v:89$199_EN[0:0]$219
+     8/12: $0$formal$rtl/siege_tile.v:89$199_CHECK[0:0]$220
+     9/12: $0$formal$rtl/siege_tile.v:91$200_EN[0:0]$217
+    10/12: $0$formal$rtl/siege_tile.v:91$200_CHECK[0:0]$218
+    11/12: $0$formal$rtl/siege_tile.v:92$201_EN[0:0]$215
+    12/12: $0$formal$rtl/siege_tile.v:92$201_CHECK[0:0]$216
+Creating decoders for process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:64$206'.
+     1/5: $2\i[31:0]
+     2/5: $1\i[31:0]
+     3/5: $0\accum[0][15:0]
+     4/5: $0\closing[0:0]
+     5/5: $0\out_valid[0:0]
+
+4.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\product[0]' from process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$244'.
+No latch inferred for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\value[0]' from process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$244'.
+
+4.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\refinement.\past_valid' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$393' with positive edge clock.
+Creating register for signal `\refinement.\expected' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$394' with positive edge clock.
+Creating register for signal `\refinement.\pending' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$395' with positive edge clock.
+Creating register for signal `\refinement.\pv' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$396' with positive edge clock.
+Creating register for signal `\refinement.\pf' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$397' with positive edge clock.
+Creating register for signal `\refinement.$formal$rtl/refinement.v:17$157_CHECK' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$398' with positive edge clock.
+Creating register for signal `\refinement.$formal$rtl/refinement.v:17$157_EN' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$399' with positive edge clock.
+Creating register for signal `\refinement.$formal$rtl/refinement.v:18$158_CHECK' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$400' with positive edge clock.
+Creating register for signal `\refinement.$formal$rtl/refinement.v:18$158_EN' using process `\refinement.$proc$rtl/refinement.v:15$167'.
+  created $dff cell `$procdff$401' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\pipelined.pv' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+  created $dff cell `$procdff$402' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\pipelined.pf' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+  created $dff cell `$procdff$403' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\pipelined.pl' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+  created $dff cell `$procdff$404' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\pipelined.x' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+  created $dff cell `$procdff$405' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\pipelined.prod[0]' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+  created $dff cell `$procdff$406' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\past_valid' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$407' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:92$201_EN' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$408' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:92$201_CHECK' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$409' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:91$200_EN' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$410' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:91$200_CHECK' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$411' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:89$199_EN' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$412' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:89$199_CHECK' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$413' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:86$198_EN' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$414' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:86$198_CHECK' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$415' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:85$197_EN' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$416' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:85$197_CHECK' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$417' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:83$196_EN' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$418' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$formal$rtl/siege_tile.v:83$196_CHECK' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$419' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$past$rtl/siege_tile.v:91$195$0' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$420' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$past$rtl/siege_tile.v:87$194$0' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$421' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$past$rtl/siege_tile.v:85$193$0' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$422' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$past$rtl/siege_tile.v:84$192$0' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+  created $dff cell `$procdff$423' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\out_valid' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:64$206'.
+  created $dff cell `$procdff$424' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\closing' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:64$206'.
+  created $dff cell `$procdff$425' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\i' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:64$206'.
+  created $dff cell `$procdff$426' with positive edge clock.
+Creating register for signal `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.\accum[0]' using process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:64$206'.
+  created $dff cell `$procdff$427' with positive edge clock.
+
+4.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+4.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 6 empty switches in `\refinement.$proc$rtl/refinement.v:15$167'.
+Removing empty process `refinement.$proc$rtl/refinement.v:15$167'.
+Removing empty process `refinement.$proc$rtl/refinement.v:14$187'.
+Removing empty process `refinement.$proc$rtl/refinement.v:0$188'.
+Removing empty process `refinement.$proc$rtl/refinement.v:0$190'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$263'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$261'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$259'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$257'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$255'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$253'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:80$252'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:0$244'.
+Found and cleaned up 2 empty switches in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:39$243'.
+Found and cleaned up 5 empty switches in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:81$214'.
+Found and cleaned up 6 empty switches in `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:64$206'.
+Removing empty process `$paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.$proc$rtl/siege_tile.v:64$206'.
+Cleaned up 19 empty switches.
+
+4.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+<suppressed ~5 debug messages>
+Optimizing module $paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.
+<suppressed ~6 debug messages>
+
+4.3. Executing FLATTEN pass (flatten design).
+Deleting now unused module $paramod$292777c8e8cba91d86a01adece67b522ab4cfcab\siege_tile.
+<suppressed ~1 debug messages>
+
+4.4. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+4.5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+Removed 13 unused cells and 136 unused wires.
+<suppressed ~18 debug messages>
+
+4.6. Executing CHECK pass (checking for obvious problems).
+Checking module refinement...
+Found and reported 0 problems.
+
+4.7. Executing OPT pass (performing simple optimizations).
+
+4.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+4.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+<suppressed ~15 debug messages>
+Removed a total of 5 cells.
+
+4.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \refinement..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~30 debug messages>
+
+4.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \refinement.
+Performed a total of 0 changes.
+
+4.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+<suppressed ~27 debug messages>
+Removed a total of 9 cells.
+
+4.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+Removed 0 unused cells and 12 unused wires.
+<suppressed ~1 debug messages>
+
+4.7.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+4.7.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \refinement..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~25 debug messages>
+
+4.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \refinement.
+Performed a total of 0 changes.
+
+4.7.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+Removed a total of 0 cells.
+
+4.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+
+4.7.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+4.7.14. Finished OPT passes. (There is nothing left to do.)
+
+4.8. Executing WREDUCE pass (reducing word size of cells).
+Removed top 16 bits (of 32) from mux cell refinement.$ternary$rtl/refinement.v:23$178 ($mux).
+Removed top 16 bits (of 32) from port A of cell refinement.$add$rtl/refinement.v:23$179 ($add).
+Removed top 16 bits (of 32) from port Y of cell refinement.$add$rtl/refinement.v:23$179 ($add).
+Removed top 4 bits (of 8) from port A of cell refinement.$flatten\dut.$mul$rtl/siege_tile.v:30$245 ($mul).
+Removed top 4 bits (of 8) from port B of cell refinement.$flatten\dut.$mul$rtl/siege_tile.v:30$245 ($mul).
+Removed top 16 bits (of 32) from wire refinement.$add$rtl/refinement.v:23$179_Y.
+Removed top 9 bits (of 16) from wire refinement.expected.
+
+4.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+4.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+4.11. Executing OPT pass (performing simple optimizations).
+
+4.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+4.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+Removed a total of 0 cells.
+
+4.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+
+4.11.4. Finished fast OPT passes.
+
+4.12. Printing statistics.
+
+=== refinement ===
+
+   Number of wires:                119
+   Number of wire bits:            450
+   Number of public wires:          42
+   Number of public wire bits:     163
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                106
+     $add                            2
+     $anyseq                         7
+     $assert                         6
+     $assume                         2
+     $dff                           29
+     $eq                             2
+     $logic_and                      9
+     $logic_not                      7
+     $mul                            1
+     $mux                           41
+
+4.13. Executing CHECK pass (checking for obvious problems).
+Checking module refinement...
+Found and reported 0 problems.
+
+5. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+
+6. Executing OPT pass (performing simple optimizations).
+
+6.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+6.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+<suppressed ~11 debug messages>
+Removed a total of 4 cells.
+
+6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \refinement..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~25 debug messages>
+
+6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \refinement.
+Performed a total of 0 changes.
+
+6.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+Removed a total of 0 cells.
+
+6.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding SRST signal on $procdff$397 ($dff) from module refinement (D = $procmux$276_Y, Q = \pf, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$430 ($sdff) from module refinement (D = \dut.in_first, Q = \pf).
+Adding SRST signal on $procdff$395 ($dff) from module refinement (D = $procmux$281_Y, Q = \pending, rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$432 ($sdff) from module refinement (D = { \dut.product[0] [7] \dut.product[0] [7] \dut.product[0] [7] \dut.product[0] [7] \dut.product[0] [7] \dut.product[0] [7] \dut.product[0] [7] \dut.product[0] [7] \dut.product[0] }, Q = \pending).
+Adding SRST signal on $procdff$394 ($dff) from module refinement (D = $procmux$286_Y, Q = { $auto$wreduce.cc:461:run$429 [15:7] \expected }, rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$434 ($sdff) from module refinement (D = $add$rtl/refinement.v:23$179_Y, Q = { $auto$wreduce.cc:461:run$429 [15:7] \expected }).
+Adding SRST signal on $flatten\dut.$procdff$427 ($dff) from module refinement (D = $flatten\dut.$procmux$369_Y, Q = \dut.accum[0], rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$436 ($sdff) from module refinement (D = $flatten\dut.$add$rtl/siege_tile.v:73$210_Y, Q = \dut.accum[0]).
+Adding SRST signal on $flatten\dut.$procdff$425 ($dff) from module refinement (D = $flatten\dut.$procmux$376_Y, Q = \dut.closing, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$438 ($sdff) from module refinement (D = $flatten\dut.$procmux$376_Y, Q = \dut.closing).
+Adding SRST signal on $flatten\dut.$procdff$424 ($dff) from module refinement (D = $flatten\dut.$procmux$386_Y, Q = \dut.out_valid, rval = 1'0).
+Adding SRST signal on $flatten\dut.$procdff$414 ($dff) from module refinement (D = $flatten\dut.$procmux$327_Y, Q = $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN, rval = 1'0).
+Adding SRST signal on $flatten\dut.$procdff$412 ($dff) from module refinement (D = $flatten\dut.$procmux$343_Y, Q = $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN, rval = 1'0).
+Adding EN signal on $flatten\dut.$procdff$406 ($dff) from module refinement (D = \dut.product[0], Q = \dut.pipelined.prod[0]).
+Adding SRST signal on $flatten\dut.$procdff$404 ($dff) from module refinement (D = $flatten\dut.$procmux$312_Y, Q = \dut.pipelined.pl, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$450 ($sdff) from module refinement (D = \dut.in_last, Q = \dut.pipelined.pl).
+Adding SRST signal on $flatten\dut.$procdff$403 ($dff) from module refinement (D = $flatten\dut.$procmux$318_Y, Q = \dut.pipelined.pf, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$452 ($sdff) from module refinement (D = \dut.in_first, Q = \dut.pipelined.pf).
+Adding SRST signal on $flatten\dut.$procdff$402 ($dff) from module refinement (D = \dut.accepted, Q = \dut.pipelined.pv, rval = 1'0).
+
+6.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+Removed 19 unused cells and 21 unused wires.
+<suppressed ~20 debug messages>
+
+6.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+<suppressed ~1 debug messages>
+
+6.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \refinement..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~17 debug messages>
+
+6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \refinement.
+Performed a total of 0 changes.
+
+6.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+6.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+
+6.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+6.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \refinement..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~17 debug messages>
+
+6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \refinement.
+Performed a total of 0 changes.
+
+6.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\refinement'.
+Removed a total of 0 cells.
+
+6.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \refinement..
+
+6.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module refinement.
+
+6.23. Finished OPT passes. (There is nothing left to do.)
+
+7. Executing SAT pass (solving SAT problems in the circuit).
+
+Setting up time step 1:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import set-constraint from init attribute: $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN = 1'0
+Import set-constraint from init attribute: $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN = 1'0
+Import set-constraint from init attribute: $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN = 1'0
+Import set-constraint from init attribute: $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN = 1'0
+Import set-constraint from init attribute: $formal$rtl/refinement.v:18$158_EN = 1'0
+Import set-constraint from init attribute: \dut.past_valid = 1'0
+Final init constraint equation: { \dut.past_valid $formal$rtl/refinement.v:18$158_EN $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN } = 6'000000
+
+Setting up time step 2:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+
+Setting up time step 3:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+
+Setting up time step 4:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+
+Setting up time step 1:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+** Trying induction with length 1 **
+
+Setting up time step 5:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[base case 1] Solving problem with 10399 variables and 29085 clauses..
+Base case for induction length 1 proven.
+
+Setting up time step 2:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[induction step 1] Solving problem with 3831 variables and 10596 clauses..
+Induction step failed. Incrementing induction length.
+
+  Time Signal Name                                                     Dec       Hex                 Bin
+  ---- ------------------------------------------------------- ----------- --------- -------------------
+  init $auto$wreduce.cc:461:run$429 [15:7]                             255        ff           011111111
+  init $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN                   0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN                   0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN                   0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN                   0         0                   0
+  init $flatten\dut.$past$rtl/siege_tile.v:84$192$0                      0         0                   0
+  init $flatten\dut.$past$rtl/siege_tile.v:85$193$0                      1         1                   1
+  init $flatten\dut.$past$rtl/siege_tile.v:87$194$0                  64895      fd7f    1111110101111111
+  init $formal$rtl/refinement.v:18$158_CHECK                             0         0                   0
+  init $formal$rtl/refinement.v:18$158_EN                                0         0                   0
+  init \dut.accum[0]                                                     0         0    0000000000000000
+  init \dut.closing                                                      0         0                   0
+  init \dut.out_valid                                                    0         0                   0
+  init \dut.past_valid                                                   1         1                   1
+  init \dut.pipelined.pl                                                 0         0                   0
+  init \dut.pipelined.prod[0]                                          247        f7            11110111
+  init \dut.pipelined.pv                                                 1         1                   1
+  init \expected                                                       123        7b             1111011
+  init \pending                                                          8         8    0000000000001000
+  init \pf                                                               1         1                   1
+
+** Trying induction with length 2 **
+
+Setting up time step 6:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[base case 2] Solving problem with 12872 variables and 36195 clauses..
+Base case for induction length 2 proven.
+
+Setting up time step 3:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[induction step 2] Solving problem with 6581 variables and 18628 clauses..
+Induction step failed. Incrementing induction length.
+
+  Time Signal Name                                                     Dec       Hex                 Bin
+  ---- ------------------------------------------------------- ----------- --------- -------------------
+  init $auto$wreduce.cc:461:run$429 [15:7]                             495       1ef           111101111
+  init $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN                   1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN                   1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN                   0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN                   1         1                   1
+  init $flatten\dut.$past$rtl/siege_tile.v:84$192$0                      0         0                   0
+  init $flatten\dut.$past$rtl/siege_tile.v:85$193$0                      0         0                   0
+  init $flatten\dut.$past$rtl/siege_tile.v:87$194$0                  34818      8802    1000100000000010
+  init $formal$rtl/refinement.v:18$158_CHECK                             1         1                   1
+  init $formal$rtl/refinement.v:18$158_EN                                0         0                   0
+  init \dut.accum[0]                                                 63486      f7fe    1111011111111110
+  init \dut.closing                                                      0         0                   0
+  init \dut.out_valid                                                    0         0                   0
+  init \dut.past_valid                                                   1         1                   1
+  init \dut.pipelined.pl                                                 1         1                   1
+  init \dut.pipelined.prod[0]                                          255        ff            11111111
+  init \dut.pipelined.pv                                                 1         1                   1
+  init \expected                                                       126        7e             1111110
+  init \pending                                                       2041       7f9    0000011111111001
+  init \pf                                                               0         0                   0
+
+** Trying induction with length 3 **
+
+Setting up time step 7:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[base case 3] Solving problem with 15622 variables and 44227 clauses..
+Base case for induction length 3 proven.
+
+Setting up time step 4:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[induction step 3] Solving problem with 9608 variables and 27582 clauses..
+Induction step failed. Incrementing induction length.
+
+  Time Signal Name                                                     Dec       Hex                 Bin
+  ---- ------------------------------------------------------- ----------- --------- -------------------
+  init $auto$wreduce.cc:461:run$429 [15:7]                               0         0           000000000
+  init $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN                   1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN                   0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK                0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN                   0         0                   0
+  init $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK                1         1                   1
+  init $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN                   1         1                   1
+  init $flatten\dut.$past$rtl/siege_tile.v:84$192$0                      0         0                   0
+  init $flatten\dut.$past$rtl/siege_tile.v:85$193$0                      0         0                   0
+  init $flatten\dut.$past$rtl/siege_tile.v:87$194$0                  65531      fffb    1111111111111011
+  init $formal$rtl/refinement.v:18$158_CHECK                             0         0                   0
+  init $formal$rtl/refinement.v:18$158_EN                                0         0                   0
+  init \dut.accum[0]                                                    62        3e    0000000000111110
+  init \dut.closing                                                      0         0                   0
+  init \dut.out_valid                                                    0         0                   0
+  init \dut.past_valid                                                   1         1                   1
+  init \dut.pipelined.pl                                                 1         1                   1
+  init \dut.pipelined.prod[0]                                          191        bf            10111111
+  init \dut.pipelined.pv                                                 1         1                   1
+  init \expected                                                        62        3e             0111110
+  init \pending                                                      65471      ffbf    1111111110111111
+  init \pf                                                               0         0                   0
+
+** Trying induction with length 4 **
+
+Setting up time step 8:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[base case 4] Solving problem with 18649 variables and 53181 clauses..
+Base case for induction length 4 proven.
+
+Setting up time step 5:
+Final constraint equation: { } = { }
+Imported 85 cells to SAT database.
+Import constraint from assume cell: $flatten\dut.$formal$rtl/siege_tile.v:83$196_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:83$196_EN.
+Import proof for assert: $formal$rtl/refinement.v:18$158_CHECK when $formal$rtl/refinement.v:18$158_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:85$197_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:86$198_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:86$198_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:89$199_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:89$199_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:91$200_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+Import proof for assert: $flatten\dut.$formal$rtl/siege_tile.v:92$201_CHECK when $flatten\dut.$formal$rtl/siege_tile.v:92$201_EN.
+
+[induction step 4] Solving problem with 12912 variables and 37458 clauses..
+Induction step proven: SUCCESS!
+
+                  /$$$$$$      /$$$$$$$$     /$$$$$$$    
+                 /$$__  $$    | $$_____/    | $$__  $$   
+                | $$  \ $$    | $$          | $$  \ $$   
+                | $$  | $$    | $$$$$       | $$  | $$   
+                | $$  | $$    | $$__/       | $$  | $$   
+                | $$/$$ $$    | $$          | $$  | $$   
+                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$
+                 \____ $$$|__/|________/|__/|_______/|__/
+                       \__/                              
+
+Warnings: 2 unique messages, 4 total
+End of script. Logfile hash: cb30e25a87, CPU: user 0.30s system 0.00s, MEM: 32.68 MB peak
+Yosys 0.33 (git sha1 2584903a060)
+Time spent: 70% 1x sat (0 sec), 7% 3x read_verilog (0 sec), ...

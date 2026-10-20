@@ -1,4 +1,6 @@
-# Release validation — 20 October 2026
+# Original v1.0 release validation — 20 October 2026
+
+This records the first release. The later System lab adds a trained model and unbounded single-lane refinement; see the published integrated evidence for that scope.
 
 Live site: https://silicon-siege.pages.dev/
 
@@ -43,3 +45,11 @@ Eleven representative production assets, including code, original art, tests/ben
 The new Pages project uses a dedicated D1 quota database and Workers AI binding. Eight attempts per visitor IP/day and 64 global attempts/day are enforced before inference. Automated tests cover exhausted quota and database failure; live testing deliberately did not exhaust the visitor budget. No paid plan upgrade was used. Simulation and adaptive search remain local and unlimited.
 
 This validates the stated digital, model and academic physical-design contracts. It is not foundry signoff, measured silicon, task-level neural-network accuracy, or unbounded verification.
+
+## v1.1 integrated evidence
+
+The later [integrated workflow](https://github.com/raaaaaif/silicon-siege/actions/runs/39505161076) passes 48 configurations and 384 matrix transactions, independent result/counter checks, synthesized inferred-memory netlist replay, both controller mutations, and four unbounded single-lane refinement proofs. The browser test suite now has 19 passing tests, including all 21,564 integer classifier predictions and all 384 measured performance records. Selector tests remove test outcomes entirely and verify that architecture selection remains identical.
+
+The [matched routed timing experiment](https://github.com/raaaaaif/silicon-siege/actions/runs/39504591731) completes both direct and pipelined 4×4 INT8 ACC24 tiles at the same 2 ns clock and 0.4 ns input/output delays. Both pass setup/hold, capacitance/slew, and routing checks. Exact numbers and scope are in `web/evidence/timing-ablation.json`.
+
+Repair history: inferred-memory synthesis initially checked the intermediate graph before dead-cell cleanup; the standard cleanup pass resolved its dangling intermediate nodes, while `check -assert` remains enabled. A new synthesized-netlist replay confirms behavior after cleanup. The netlist testbench needed parameter overrides removed because synthesis specializes those parameters. Neither hardware constraints nor oracle comparisons were relaxed. The first INT8 magnitude/sign formal reference timed out; the published successful harness uses a shared mathematical multiplication primitive and independently tracks sequential state, with that limitation documented.

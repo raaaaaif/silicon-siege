@@ -1,3 +1,5 @@
+> The original Workbench architecture below remains supported. The separate System lab implements a banked-memory controller and trained integer classifier; its contracts and numerical specification are recorded in the integrated evidence. Do not apply the original cache-model assumptions to the subsystem RTL.
+
 # Architecture and model contract
 
 ## Runtime

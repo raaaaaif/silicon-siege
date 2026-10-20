@@ -6,7 +6,17 @@ An interactive, adversarial accelerator-design lab bridging digital ECE, compute
 
 ![Live Silicon Siege workbench](docs/screenshots/workbench.jpg)
 
-[Release verification and known boundaries](docs/VALIDATION.md)
+[Original release validation](docs/VALIDATION.md)
+
+## System lab: from trained model to accelerator RTL
+
+[Open the System lab](https://silicon-siege.pages.dev/#/lab). Edit a real held-out digit, switch precision and accumulator width, inspect exact integer tensors, and compare a serialized versus overlapped operand schedule. A constrained architect enumerates 96 configurations using validation accuracy, measured MAC-tile area and RTL-checked clocks; held-out test labels do not participate in selection.
+
+- **Actual ML:** newly trained 64→32→10 MLP, official UCI writer-separated test set, disjoint fitting/calibration/validation, static INT4/INT8 PTQ, integer bias/ReLU/Q20 requantization, accuracy intervals and confusion matrices. All 21,564 held-out integer predictions match the independent NumPy path.
+- **Integrated hardware:** synthesizable command decoder, synchronous operand banks, tiled controller, boundary masks, backpressured indexed output, error completion, reset abort and performance counters. 48 hardware configurations exercise 384 full GEMMs, including both quantized classifier layers. The representative synthesized inferred-memory netlist is replayed through the same scoreboard.
+- **Falsifiable evidence:** stale-prefetch and index mutations, additional unbounded single-lane arithmetic refinement, and an exhaustive-reference search audit over 20 paired seeds. The fixed heuristic beats adaptive search on nominal regret; those negative results are published.
+
+The memory subsystem is synthesized and simulated; only the MAC tile has routed physical evidence. This remains an academic accelerator case study, not a fabricated or production-qualified SoC.
 
 ## Run locally
 
@@ -15,7 +25,8 @@ Requires Node 22+ and Python 3 for the independent-oracle test. No npm dependenc
 ```sh
 npm run dev       # http://127.0.0.1:4173
 npm test          # model, cross-language oracle and API quota contracts
-npm run experiments  # reproduce the 1,620-evaluation benchmark
+npm run experiments  # reproduce the original 1,620-evaluation benchmark
+node scripts/search-audit.mjs  # 20-seed, exhaustive-reference search audit
 ```
 
 Cloud mentor calls are disabled on the local static server. Simulation, adaptive search, adversarial cases, evidence, export and share all work without inference credentials. Local development was performed with less than 0.6 GB free disk; large EDA toolchains ran only on GitHub-hosted runners.
@@ -36,15 +47,17 @@ Read [research and stress tests](docs/RESEARCH.md), [architecture and contracts]
 
 The published 5-seed, 3-workload benchmark does **not** show universal surrogate superiority: the fixed heuristic has the best mean final objective, and adaptive search outperforms random on average. Complete measurements, including unfavorable results, are downloadable.
 
-These are synthetic numerical kernels, not a trained model's classification accuracy. The SRAM, host and external memory are modeled, not included in RTL physical area. Nangate45 is an academic platform; results are not foundry signoff, measured power or fabricated silicon. Bounded control checks are not a proof of arbitrary RTL or an entire SoC. This is a reproducible engineering project, not a claim to have surpassed state-of-the-art EDA research.
+The original Workbench briefs are synthetic numerical kernels; the separate System lab runs the trained classifier. System-lab operand banks and scheduling are implemented in RTL, but the memories/controller are not included in the compute tile's physical area. External memory and SoC integration remain outside scope. Nangate45 is an academic platform; results are not foundry signoff, measured power or fabricated silicon. The old bounded control checks and new single-lane induction proofs do not prove arbitrary RTL or an entire SoC. This is a reproducible engineering project, not a claim to have surpassed state-of-the-art EDA research.
 
 ## Reproduce hardware evidence
 
-Repository Actions include **Hardware evidence**, **Physical design evidence**, and **Browser model and API contract**. Hardware tools run remotely. The physical flow pins its official OpenROAD container digest; reports record RTL/library hashes and source commits. The synthesis workflow records tool versions and the library hash.
+Repository Actions include **Hardware evidence**, **Physical design evidence**, and **Browser model and API contract**, **Integrated accelerator and ML evidence**, and **Routed pipeline timing ablation**. Hardware tools run remotely. The physical flow pins its official OpenROAD container digest; reports record RTL/library hashes and source commits. The synthesis workflow records tool versions and the library hash.
 
 ```sh
 gh workflow run hardware.yml
 gh workflow run physical.yml
+gh workflow run depth.yml
+gh workflow run timing.yml
 # After downloading the physical-evidence artifact:
 python3 scripts/import-evidence.py PATH_TO_ARTIFACT RUN_URL
 ```

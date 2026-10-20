@@ -25,6 +25,7 @@
       >
       <nav aria-label="Main navigation">
         <button class="nav active" data-view="workbench">Workbench</button
+        ><button class="nav" data-view="lab">System lab</button
         ><button class="nav" data-view="experiments">Experiments</button
         ><button class="nav" data-view="evidence">Evidence</button
         ><button class="nav" data-view="guide">Field guide</button>
@@ -48,6 +49,9 @@
             <p>
               Design a tiny accelerator. Find its limits. Improve it with
               evidence.
+              <button class="text-btn" data-open="lab">
+                Explore the real ML + RTL system lab ↗
+              </button>
             </p>
           </div>
           <div class="intro-status">
@@ -302,6 +306,21 @@
           </div>
         </section>
       </section>
+      <section id="lab" class="view">
+        <div class="page-heading">
+          <div class="eyebrow">FROM ML ACCURACY TO RTL TRANSACTIONS</div>
+          <h1>Make the whole system accountable.</h1>
+          <p>
+            A real trained classifier. A banked-memory accelerator. Independent
+            evidence connecting the two.
+          </p>
+        </div>
+        <div id="labContent">
+          <div class="card prose">
+            Loading the trained model and hardware evidence…
+          </div>
+        </div>
+      </section>
       <section id="experiments" class="view">
         <div class="page-heading">
           <div class="eyebrow">CONTROLLED EXPERIMENTS</div>
@@ -511,7 +530,7 @@
       </section>
     </main>
     <footer>
-      <span>SILICON / SIEGE <b>v1.0</b></span
+      <span>SILICON / SIEGE <b>v1.1</b></span
       ><span>Built to be questioned. Designed to be understood.</span
       ><span>Browser model + real RTL evidence</span>
     </footer>
@@ -526,5 +545,6 @@
     </dialog>
     <div class="toast" id="toast" role="status" hidden></div>
     <script type="module" src="/app.js"></script>
+    <script type="module" src="/lab.js"></script>
   </body>
 </html>

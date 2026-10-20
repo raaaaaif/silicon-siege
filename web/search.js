@@ -1,5 +1,5 @@
 // Sequential surrogate-guided optimization. RBF kernel regression with an
-// uncertainty exploration bonus; explicitly not an LLM or exact GP posterior.
+// distance exploration bonus; explicitly not calibrated uncertainty or an exact GP posterior.
 import {
   allConfigs,
   configId,
@@ -37,7 +37,13 @@ export function predict(c, observations) {
 }
 export function* search(
   w,
-  { budget = 36, seed = 42, method = "surrogate", start = DEFAULT } = {},
+  {
+    budget = 36,
+    seed = 42,
+    method = "surrogate",
+    start = DEFAULT,
+    evaluator = evaluate,
+  } = {},
 ) {
   const random = rng(seed),
     remaining = new Map(space.map((c) => [configId(c), c])),
@@ -56,17 +62,21 @@ export function* search(
     } else {
       const ranked = candidates
         .map((c) => ({ c, p: predict(c, observations) }))
-        .sort((a, b) => a.p.acquisition - b.p.acquisition);
+        .sort((a, b) =>
+          method === "greedy"
+            ? a.p.mean - b.p.mean
+            : a.p.acquisition - b.p.acquisition,
+        );
       // Every 5th query explores instead of trusting a weak surrogate.
       c =
-        i % 5 === 0
+        method !== "greedy" && i % 5 === 0
           ? candidates[Math.floor(random() * candidates.length)]
           : ranked[0].c;
       pred = predict(c, observations);
     }
     if (!remaining.has(configId(c))) c = candidates[0];
     remaining.delete(configId(c));
-    const result = evaluate(c, w);
+    const result = evaluator(c, w);
     observations.push(result);
     yield {
       iteration: i + 1,

@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "proofs": [
+    {
+      "bits": 4,
+      "acc": 16,
+      "pipe": 0,
+      "result": "inductive proof passed",
+      "log": "refinement-b4-a16-s0.log"
+    },
+    {
+      "bits": 4,
+      "acc": 16,
+      "pipe": 1,
+      "result": "inductive proof passed",
+      "log": "refinement-b4-a16-s1.log"
+    },
+    {
+      "bits": 8,
+      "acc": 24,
+      "pipe": 0,
+      "result": "inductive proof passed",
+      "log": "refinement-b8-a24-s0.log"
+    },
+    {
+      "bits": 8,
+      "acc": 24,
+      "pipe": 1,
+      "result": "inductive proof passed",
+      "log": "refinement-b8-a24-s1.log"
+    }
+  ],
+  "scope": "Unbounded single-lane modular arithmetic refinement and tile protocol. Arbitrary input values and valid/ready sequences after initial reset. Does not establish system-level liveness, CDC or physical correctness.",
+  "harness_sha256": "7732c478cbfc0cd4b0f61239aa5c82a1829e152dd36bfcc3d1fa8285a1509170"
+}

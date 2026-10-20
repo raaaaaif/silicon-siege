@@ -1,1 +1,12 @@
-{"name":"silicon-siege","version":"1.0.0","private":true,"type":"module","scripts":{"test":"node --test tests/*.test.mjs","dev":"node scripts/serve.mjs","experiments":"node scripts/experiments.mjs"}}
+{
+  "name": "silicon-siege",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "dev": "node scripts/serve.mjs",
+    "experiments": "node scripts/experiments.mjs",
+    "audit-search": "node scripts/search-audit.mjs"
+  }
+}

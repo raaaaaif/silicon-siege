@@ -161,7 +161,7 @@ document.addEventListener("click", (e) => {
   if (open) setView(open.dataset.open);
 });
 function setView(id) {
-  if (!["workbench", "experiments", "evidence", "guide"].includes(id))
+  if (!["workbench", "lab", "experiments", "evidence", "guide"].includes(id))
     id = "workbench";
   stop();
   $$(".view").forEach((x) => x.classList.toggle("active", x.id === id));

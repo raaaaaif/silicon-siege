@@ -1,0 +1,963 @@
+
+ /----------------------------------------------------------------------------\
+ |                                                                            |
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |                                                                            |
+ |  Copyright (C) 2012 - 2020  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |                                                                            |
+ |  Permission to use, copy, modify, and/or distribute this software for any  |
+ |  purpose with or without fee is hereby granted, provided that the above    |
+ |  copyright notice and this permission notice appear in all copies.         |
+ |                                                                            |
+ |  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  |
+ |  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          |
+ |  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   |
+ |  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    |
+ |  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     |
+ |  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   |
+ |  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            |
+ |                                                                            |
+ \----------------------------------------------------------------------------/
+
+ Yosys 0.33 (git sha1 2584903a060)
+
+
+-- Running command `read_verilog rtl/siege_tile.v rtl/siege_system.v; hierarchy -top siege_system; proc; opt; memory_dff; memory_collect; opt_clean; check -assert; stat -width; write_json build/depth/system-netlist.json; write_verilog -noattr build/depth/system-synth.v' --
+
+1. Executing Verilog-2005 frontend: rtl/siege_tile.v
+Parsing Verilog input from `rtl/siege_tile.v' to AST representation.
+Generating RTLIL representation for module `\siege_tile'.
+Warning: Replacing memory \pipelined.prod with list of registers. See rtl/siege_tile.v:45
+Warning: Replacing memory \accum with list of registers. See rtl/siege_tile.v:67
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: rtl/siege_system.v
+Parsing Verilog input from `rtl/siege_system.v' to AST representation.
+Generating RTLIL representation for module `\siege_system'.
+Successfully finished Verilog frontend.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \siege_system
+Used module:     \siege_tile
+Parameter \P = 4
+Parameter \BITS = 8
+Parameter \ACC = 24
+Parameter \PIPE = 1
+
+3.2. Executing AST frontend in derive mode using pre-parsed AST for module `\siege_tile'.
+Parameter \P = 4
+Parameter \BITS = 8
+Parameter \ACC = 24
+Parameter \PIPE = 1
+Generating RTLIL representation for module `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile'.
+Warning: Replacing memory \pipelined.prod with list of registers. See rtl/siege_tile.v:45
+Warning: Replacing memory \accum with list of registers. See rtl/siege_tile.v:67
+
+3.3. Analyzing design hierarchy..
+Top module:  \siege_system
+Used module:     $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile
+
+3.4. Analyzing design hierarchy..
+Top module:  \siege_system
+Used module:     $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile
+Removing unused module `\siege_tile'.
+Removed 1 unused modules.
+
+4. Executing PROC pass (convert processes to netlists).
+
+4.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `\siege_system.$proc$rtl/siege_system.v:61$117'.
+Cleaned up 1 empty switch.
+
+4.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 3 switch rules as full_case in process $proc$rtl/siege_system.v:44$316 in module siege_system.
+Marked 3 switch rules as full_case in process $proc$rtl/siege_system.v:44$261 in module siege_system.
+Marked 3 switch rules as full_case in process $proc$rtl/siege_system.v:44$206 in module siege_system.
+Marked 3 switch rules as full_case in process $proc$rtl/siege_system.v:44$151 in module siege_system.
+Marked 7 switch rules as full_case in process $proc$rtl/siege_system.v:61$117 in module siege_system.
+Marked 2 switch rules as full_case in process $proc$rtl/siege_tile.v:39$413 in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+Marked 2 switch rules as full_case in process $proc$rtl/siege_tile.v:64$375 in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+Removed a total of 0 dead cases.
+
+4.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 1 redundant assignment.
+Promoted 58 assignments to connections.
+
+4.4. Executing PROC_INIT pass (extract init attributes).
+
+4.5. Executing PROC_ARST pass (detect async resets in processes).
+
+4.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~40 debug messages>
+
+4.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+     1/14: $2$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_EN[7:0]$353
+     2/14: $2$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_DATA[7:0]$352
+     3/14: $2$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_ADDR[31:0]$351
+     4/14: $2$memwr$\banks[3].amem$rtl/siege_system.v:47$70_EN[7:0]$341
+     5/14: $2$memwr$\banks[3].amem$rtl/siege_system.v:47$70_DATA[7:0]$340
+     6/14: $2$memwr$\banks[3].amem$rtl/siege_system.v:47$70_ADDR[31:0]$339
+     7/14: $1$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_EN[7:0]$331
+     8/14: $1$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_DATA[7:0]$330
+     9/14: $1$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_ADDR[31:0]$329
+    10/14: $1$memwr$\banks[3].amem$rtl/siege_system.v:47$70_EN[7:0]$328
+    11/14: $1$memwr$\banks[3].amem$rtl/siege_system.v:47$70_DATA[7:0]$327
+    12/14: $1$memwr$\banks[3].amem$rtl/siege_system.v:47$70_ADDR[31:0]$326
+    13/14: $0\banks[3].br[7:0]
+    14/14: $0\banks[3].ar[7:0]
+Creating decoders for process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+     1/14: $2$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_EN[7:0]$298
+     2/14: $2$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_DATA[7:0]$297
+     3/14: $2$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_ADDR[31:0]$296
+     4/14: $2$memwr$\banks[2].amem$rtl/siege_system.v:47$68_EN[7:0]$286
+     5/14: $2$memwr$\banks[2].amem$rtl/siege_system.v:47$68_DATA[7:0]$285
+     6/14: $2$memwr$\banks[2].amem$rtl/siege_system.v:47$68_ADDR[31:0]$284
+     7/14: $1$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_EN[7:0]$276
+     8/14: $1$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_DATA[7:0]$275
+     9/14: $1$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_ADDR[31:0]$274
+    10/14: $1$memwr$\banks[2].amem$rtl/siege_system.v:47$68_EN[7:0]$273
+    11/14: $1$memwr$\banks[2].amem$rtl/siege_system.v:47$68_DATA[7:0]$272
+    12/14: $1$memwr$\banks[2].amem$rtl/siege_system.v:47$68_ADDR[31:0]$271
+    13/14: $0\banks[2].br[7:0]
+    14/14: $0\banks[2].ar[7:0]
+Creating decoders for process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+     1/14: $2$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_EN[7:0]$243
+     2/14: $2$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_DATA[7:0]$242
+     3/14: $2$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_ADDR[31:0]$241
+     4/14: $2$memwr$\banks[1].amem$rtl/siege_system.v:47$66_EN[7:0]$231
+     5/14: $2$memwr$\banks[1].amem$rtl/siege_system.v:47$66_DATA[7:0]$230
+     6/14: $2$memwr$\banks[1].amem$rtl/siege_system.v:47$66_ADDR[31:0]$229
+     7/14: $1$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_EN[7:0]$221
+     8/14: $1$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_DATA[7:0]$220
+     9/14: $1$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_ADDR[31:0]$219
+    10/14: $1$memwr$\banks[1].amem$rtl/siege_system.v:47$66_EN[7:0]$218
+    11/14: $1$memwr$\banks[1].amem$rtl/siege_system.v:47$66_DATA[7:0]$217
+    12/14: $1$memwr$\banks[1].amem$rtl/siege_system.v:47$66_ADDR[31:0]$216
+    13/14: $0\banks[1].br[7:0]
+    14/14: $0\banks[1].ar[7:0]
+Creating decoders for process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+     1/14: $2$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_EN[7:0]$188
+     2/14: $2$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_DATA[7:0]$187
+     3/14: $2$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_ADDR[31:0]$186
+     4/14: $2$memwr$\banks[0].amem$rtl/siege_system.v:47$64_EN[7:0]$176
+     5/14: $2$memwr$\banks[0].amem$rtl/siege_system.v:47$64_DATA[7:0]$175
+     6/14: $2$memwr$\banks[0].amem$rtl/siege_system.v:47$64_ADDR[31:0]$174
+     7/14: $1$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_EN[7:0]$166
+     8/14: $1$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_DATA[7:0]$165
+     9/14: $1$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_ADDR[31:0]$164
+    10/14: $1$memwr$\banks[0].amem$rtl/siege_system.v:47$64_EN[7:0]$163
+    11/14: $1$memwr$\banks[0].amem$rtl/siege_system.v:47$64_DATA[7:0]$162
+    12/14: $1$memwr$\banks[0].amem$rtl/siege_system.v:47$64_ADDR[31:0]$161
+    13/14: $0\banks[0].br[7:0]
+    14/14: $0\banks[0].ar[7:0]
+Creating decoders for process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+     1/13: $0\lane[4:0]
+     2/13: $0\kk[6:0]
+     3/13: $0\k[6:0]
+     4/13: $0\tc[5:0]
+     5/13: $0\n[5:0]
+     6/13: $0\tr[3:0]
+     7/13: $0\m[3:0]
+     8/13: $0\state[2:0]
+     9/13: $0\read_cycles[31:0]
+    10/13: $0\output_stalls[31:0]
+    11/13: $0\mac_beats[31:0]
+    12/13: $0\cycles[31:0]
+    13/13: $0\error[0:0]
+Creating decoders for process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+Creating decoders for process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+     1/21: $2\pipelined.x[31:0]
+     2/21: $0\pipelined.pv[0:0]
+     3/21: $1\pipelined.x[31:0]
+     4/21: $0\pipelined.prod[15][15:0]
+     5/21: $0\pipelined.prod[14][15:0]
+     6/21: $0\pipelined.prod[13][15:0]
+     7/21: $0\pipelined.prod[12][15:0]
+     8/21: $0\pipelined.prod[11][15:0]
+     9/21: $0\pipelined.prod[10][15:0]
+    10/21: $0\pipelined.prod[9][15:0]
+    11/21: $0\pipelined.prod[8][15:0]
+    12/21: $0\pipelined.prod[7][15:0]
+    13/21: $0\pipelined.prod[6][15:0]
+    14/21: $0\pipelined.prod[5][15:0]
+    15/21: $0\pipelined.prod[4][15:0]
+    16/21: $0\pipelined.prod[3][15:0]
+    17/21: $0\pipelined.prod[2][15:0]
+    18/21: $0\pipelined.prod[1][15:0]
+    19/21: $0\pipelined.prod[0][15:0]
+    20/21: $0\pipelined.pl[0:0]
+    21/21: $0\pipelined.pf[0:0]
+Creating decoders for process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+     1/20: $2\i[31:0]
+     2/20: $1\i[31:0]
+     3/20: $0\accum[15][23:0]
+     4/20: $0\accum[14][23:0]
+     5/20: $0\accum[13][23:0]
+     6/20: $0\accum[12][23:0]
+     7/20: $0\accum[11][23:0]
+     8/20: $0\accum[10][23:0]
+     9/20: $0\accum[9][23:0]
+    10/20: $0\accum[8][23:0]
+    11/20: $0\accum[7][23:0]
+    12/20: $0\accum[6][23:0]
+    13/20: $0\accum[5][23:0]
+    14/20: $0\accum[4][23:0]
+    15/20: $0\accum[3][23:0]
+    16/20: $0\accum[2][23:0]
+    17/20: $0\accum[1][23:0]
+    18/20: $0\accum[0][23:0]
+    19/20: $0\closing[0:0]
+    20/20: $0\out_valid[0:0]
+
+4.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[0]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[1]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[2]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[3]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[4]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[5]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[6]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[7]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[8]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[9]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[10]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[11]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[12]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[13]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[14]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\product[15]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[0]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[1]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[2]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[3]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[4]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[5]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[6]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[7]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[8]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[9]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[10]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[11]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[12]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[13]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[14]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+No latch inferred for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\value[15]' from process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+
+4.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\siege_system.\banks[3].ar' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1160' with positive edge clock.
+Creating register for signal `\siege_system.\banks[3].br' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1161' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[3].amem$rtl/siege_system.v:47$70_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1162' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[3].amem$rtl/siege_system.v:47$70_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1163' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[3].amem$rtl/siege_system.v:47$70_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1164' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1165' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1166' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$316'.
+  created $dff cell `$procdff$1167' with positive edge clock.
+Creating register for signal `\siege_system.\banks[2].ar' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1168' with positive edge clock.
+Creating register for signal `\siege_system.\banks[2].br' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1169' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[2].amem$rtl/siege_system.v:47$68_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1170' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[2].amem$rtl/siege_system.v:47$68_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1171' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[2].amem$rtl/siege_system.v:47$68_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1172' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1173' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1174' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$261'.
+  created $dff cell `$procdff$1175' with positive edge clock.
+Creating register for signal `\siege_system.\banks[1].ar' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1176' with positive edge clock.
+Creating register for signal `\siege_system.\banks[1].br' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1177' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[1].amem$rtl/siege_system.v:47$66_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1178' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[1].amem$rtl/siege_system.v:47$66_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1179' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[1].amem$rtl/siege_system.v:47$66_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1180' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1181' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1182' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$206'.
+  created $dff cell `$procdff$1183' with positive edge clock.
+Creating register for signal `\siege_system.\banks[0].ar' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1184' with positive edge clock.
+Creating register for signal `\siege_system.\banks[0].br' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1185' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[0].amem$rtl/siege_system.v:47$64_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1186' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[0].amem$rtl/siege_system.v:47$64_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1187' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[0].amem$rtl/siege_system.v:47$64_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1188' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_ADDR' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1189' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_DATA' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1190' with positive edge clock.
+Creating register for signal `\siege_system.$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_EN' using process `\siege_system.$proc$rtl/siege_system.v:44$151'.
+  created $dff cell `$procdff$1191' with positive edge clock.
+Creating register for signal `\siege_system.\error' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1192' with positive edge clock.
+Creating register for signal `\siege_system.\cycles' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1193' with positive edge clock.
+Creating register for signal `\siege_system.\mac_beats' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1194' with positive edge clock.
+Creating register for signal `\siege_system.\output_stalls' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1195' with positive edge clock.
+Creating register for signal `\siege_system.\read_cycles' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1196' with positive edge clock.
+Creating register for signal `\siege_system.\state' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1197' with positive edge clock.
+Creating register for signal `\siege_system.\m' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1198' with positive edge clock.
+Creating register for signal `\siege_system.\tr' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1199' with positive edge clock.
+Creating register for signal `\siege_system.\n' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1200' with positive edge clock.
+Creating register for signal `\siege_system.\tc' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1201' with positive edge clock.
+Creating register for signal `\siege_system.\k' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1202' with positive edge clock.
+Creating register for signal `\siege_system.\kk' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1203' with positive edge clock.
+Creating register for signal `\siege_system.\lane' using process `\siege_system.$proc$rtl/siege_system.v:61$117'.
+  created $dff cell `$procdff$1204' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.pv' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1205' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.pf' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1206' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.pl' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1207' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.x' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1208' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[0]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1209' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[1]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1210' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[2]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1211' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[3]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1212' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[4]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1213' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[5]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1214' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[6]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1215' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[7]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1216' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[8]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1217' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[9]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1218' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[10]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1219' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[11]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1220' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[12]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1221' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[13]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1222' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[14]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1223' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\pipelined.prod[15]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+  created $dff cell `$procdff$1224' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\out_valid' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1225' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\closing' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1226' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\i' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1227' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[0]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1228' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[1]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1229' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[2]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1230' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[3]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1231' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[4]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1232' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[5]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1233' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[6]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1234' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[7]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1235' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[8]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1236' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[9]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1237' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[10]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1238' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[11]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1239' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[12]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1240' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[13]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1241' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[14]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1242' with positive edge clock.
+Creating register for signal `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.\accum[15]' using process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+  created $dff cell `$procdff$1243' with positive edge clock.
+
+4.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+4.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 4 empty switches in `\siege_system.$proc$rtl/siege_system.v:44$316'.
+Removing empty process `siege_system.$proc$rtl/siege_system.v:44$316'.
+Found and cleaned up 4 empty switches in `\siege_system.$proc$rtl/siege_system.v:44$261'.
+Removing empty process `siege_system.$proc$rtl/siege_system.v:44$261'.
+Found and cleaned up 4 empty switches in `\siege_system.$proc$rtl/siege_system.v:44$206'.
+Removing empty process `siege_system.$proc$rtl/siege_system.v:44$206'.
+Found and cleaned up 4 empty switches in `\siege_system.$proc$rtl/siege_system.v:44$151'.
+Removing empty process `siege_system.$proc$rtl/siege_system.v:44$151'.
+Found and cleaned up 16 empty switches in `\siege_system.$proc$rtl/siege_system.v:61$117'.
+Removing empty process `siege_system.$proc$rtl/siege_system.v:61$117'.
+Removing empty process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:0$414'.
+Found and cleaned up 2 empty switches in `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+Removing empty process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:39$413'.
+Found and cleaned up 6 empty switches in `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+Removing empty process `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.$proc$rtl/siege_tile.v:64$375'.
+Cleaned up 40 empty switches.
+
+4.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_system.
+<suppressed ~22 debug messages>
+Optimizing module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+<suppressed ~3 debug messages>
+
+5. Executing OPT pass (performing simple optimizations).
+
+5.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_system.
+<suppressed ~100 debug messages>
+Optimizing module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+
+5.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_system'.
+<suppressed ~210 debug messages>
+Finding identical cells in module `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile'.
+Removed a total of 70 cells.
+
+5.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \siege_system..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 2/2 on $mux $procmux$639.
+    dead port 2/2 on $mux $procmux$633.
+    dead port 2/2 on $mux $procmux$627.
+    dead port 2/2 on $mux $procmux$621.
+    dead port 2/2 on $mux $procmux$615.
+    dead port 2/2 on $mux $procmux$609.
+    dead port 2/2 on $mux $procmux$581.
+    dead port 2/2 on $mux $procmux$575.
+    dead port 2/2 on $mux $procmux$569.
+    dead port 2/2 on $mux $procmux$563.
+    dead port 2/2 on $mux $procmux$557.
+    dead port 2/2 on $mux $procmux$551.
+    dead port 2/2 on $mux $procmux$523.
+    dead port 2/2 on $mux $procmux$517.
+    dead port 2/2 on $mux $procmux$511.
+    dead port 2/2 on $mux $procmux$505.
+    dead port 2/2 on $mux $procmux$499.
+    dead port 2/2 on $mux $procmux$493.
+    dead port 2/2 on $mux $procmux$465.
+    dead port 2/2 on $mux $procmux$459.
+    dead port 2/2 on $mux $procmux$453.
+    dead port 2/2 on $mux $procmux$447.
+    dead port 2/2 on $mux $procmux$441.
+    dead port 2/2 on $mux $procmux$435.
+Running muxtree optimizer on module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 1/2 on $mux $procmux$1040.
+    dead port 1/2 on $mux $procmux$920.
+Removed 26 multiplexer ports.
+<suppressed ~106 debug messages>
+
+5.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \siege_system.
+    Consolidated identical input bits for $mux cell $procmux$625:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$625_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$625_Y [0]
+      New connections: $procmux$625_Y [7:1] = { $procmux$625_Y [0] $procmux$625_Y [0] $procmux$625_Y [0] $procmux$625_Y [0] $procmux$625_Y [0] $procmux$625_Y [0] $procmux$625_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$607:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$607_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$607_Y [0]
+      New connections: $procmux$607_Y [7:1] = { $procmux$607_Y [0] $procmux$607_Y [0] $procmux$607_Y [0] $procmux$607_Y [0] $procmux$607_Y [0] $procmux$607_Y [0] $procmux$607_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$567:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$567_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$567_Y [0]
+      New connections: $procmux$567_Y [7:1] = { $procmux$567_Y [0] $procmux$567_Y [0] $procmux$567_Y [0] $procmux$567_Y [0] $procmux$567_Y [0] $procmux$567_Y [0] $procmux$567_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$549:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$549_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$549_Y [0]
+      New connections: $procmux$549_Y [7:1] = { $procmux$549_Y [0] $procmux$549_Y [0] $procmux$549_Y [0] $procmux$549_Y [0] $procmux$549_Y [0] $procmux$549_Y [0] $procmux$549_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$509:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$509_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$509_Y [0]
+      New connections: $procmux$509_Y [7:1] = { $procmux$509_Y [0] $procmux$509_Y [0] $procmux$509_Y [0] $procmux$509_Y [0] $procmux$509_Y [0] $procmux$509_Y [0] $procmux$509_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$491:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$491_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$491_Y [0]
+      New connections: $procmux$491_Y [7:1] = { $procmux$491_Y [0] $procmux$491_Y [0] $procmux$491_Y [0] $procmux$491_Y [0] $procmux$491_Y [0] $procmux$491_Y [0] $procmux$491_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$451:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$451_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$451_Y [0]
+      New connections: $procmux$451_Y [7:1] = { $procmux$451_Y [0] $procmux$451_Y [0] $procmux$451_Y [0] $procmux$451_Y [0] $procmux$451_Y [0] $procmux$451_Y [0] $procmux$451_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$433:
+      Old ports: A=8'00000000, B=8'11111111, Y=$procmux$433_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$433_Y [0]
+      New connections: $procmux$433_Y [7:1] = { $procmux$433_Y [0] $procmux$433_Y [0] $procmux$433_Y [0] $procmux$433_Y [0] $procmux$433_Y [0] $procmux$433_Y [0] $procmux$433_Y [0] }
+  Optimizing cells in module \siege_system.
+    Consolidated identical input bits for $mux cell $procmux$651:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[0].amem$rtl/siege_system.v:47$64_EN[7:0]$176, Y=$procmux$651_Y
+      New ports: A=1'0, B=$procmux$625_Y [0], Y=$procmux$651_Y [0]
+      New connections: $procmux$651_Y [7:1] = { $procmux$651_Y [0] $procmux$651_Y [0] $procmux$651_Y [0] $procmux$651_Y [0] $procmux$651_Y [0] $procmux$651_Y [0] $procmux$651_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$642:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[0].bmem$rtl/siege_system.v:49$65_EN[7:0]$188, Y=$procmux$642_Y
+      New ports: A=1'0, B=$procmux$607_Y [0], Y=$procmux$642_Y [0]
+      New connections: $procmux$642_Y [7:1] = { $procmux$642_Y [0] $procmux$642_Y [0] $procmux$642_Y [0] $procmux$642_Y [0] $procmux$642_Y [0] $procmux$642_Y [0] $procmux$642_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$593:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[1].amem$rtl/siege_system.v:47$66_EN[7:0]$231, Y=$procmux$593_Y
+      New ports: A=1'0, B=$procmux$567_Y [0], Y=$procmux$593_Y [0]
+      New connections: $procmux$593_Y [7:1] = { $procmux$593_Y [0] $procmux$593_Y [0] $procmux$593_Y [0] $procmux$593_Y [0] $procmux$593_Y [0] $procmux$593_Y [0] $procmux$593_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$584:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[1].bmem$rtl/siege_system.v:49$67_EN[7:0]$243, Y=$procmux$584_Y
+      New ports: A=1'0, B=$procmux$549_Y [0], Y=$procmux$584_Y [0]
+      New connections: $procmux$584_Y [7:1] = { $procmux$584_Y [0] $procmux$584_Y [0] $procmux$584_Y [0] $procmux$584_Y [0] $procmux$584_Y [0] $procmux$584_Y [0] $procmux$584_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$535:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[2].amem$rtl/siege_system.v:47$68_EN[7:0]$286, Y=$procmux$535_Y
+      New ports: A=1'0, B=$procmux$509_Y [0], Y=$procmux$535_Y [0]
+      New connections: $procmux$535_Y [7:1] = { $procmux$535_Y [0] $procmux$535_Y [0] $procmux$535_Y [0] $procmux$535_Y [0] $procmux$535_Y [0] $procmux$535_Y [0] $procmux$535_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$526:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[2].bmem$rtl/siege_system.v:49$69_EN[7:0]$298, Y=$procmux$526_Y
+      New ports: A=1'0, B=$procmux$491_Y [0], Y=$procmux$526_Y [0]
+      New connections: $procmux$526_Y [7:1] = { $procmux$526_Y [0] $procmux$526_Y [0] $procmux$526_Y [0] $procmux$526_Y [0] $procmux$526_Y [0] $procmux$526_Y [0] $procmux$526_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$477:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[3].amem$rtl/siege_system.v:47$70_EN[7:0]$341, Y=$procmux$477_Y
+      New ports: A=1'0, B=$procmux$451_Y [0], Y=$procmux$477_Y [0]
+      New connections: $procmux$477_Y [7:1] = { $procmux$477_Y [0] $procmux$477_Y [0] $procmux$477_Y [0] $procmux$477_Y [0] $procmux$477_Y [0] $procmux$477_Y [0] $procmux$477_Y [0] }
+    Consolidated identical input bits for $mux cell $procmux$468:
+      Old ports: A=8'00000000, B=$2$memwr$\banks[3].bmem$rtl/siege_system.v:49$71_EN[7:0]$353, Y=$procmux$468_Y
+      New ports: A=1'0, B=$procmux$433_Y [0], Y=$procmux$468_Y [0]
+      New connections: $procmux$468_Y [7:1] = { $procmux$468_Y [0] $procmux$468_Y [0] $procmux$468_Y [0] $procmux$468_Y [0] $procmux$468_Y [0] $procmux$468_Y [0] $procmux$468_Y [0] }
+  Optimizing cells in module \siege_system.
+  Optimizing cells in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+Performed a total of 16 changes.
+
+5.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_system'.
+Finding identical cells in module `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile'.
+Removed a total of 0 cells.
+
+5.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding SRST signal on $procdff$1198 ($dff) from module siege_system (D = $procmux$799_Y, Q = \m, rval = 4'0000).
+Adding EN signal on $auto$ff.cc:266:slice$1252 ($sdff) from module siege_system (D = \cmd_m, Q = \m).
+Adding SRST signal on $procdff$1197 ($dff) from module siege_system (D = $procmux$807_Y, Q = \state, rval = 3'000).
+Adding EN signal on $auto$ff.cc:266:slice$1258 ($sdff) from module siege_system (D = $procmux$807_Y, Q = \state).
+Adding SRST signal on $procdff$1196 ($dff) from module siege_system (D = $procmux$850_Y, Q = \read_cycles, rval = 0).
+Adding SRST signal on $procdff$1195 ($dff) from module siege_system (D = $procmux$865_Y, Q = \output_stalls, rval = 0).
+Adding SRST signal on $procdff$1194 ($dff) from module siege_system (D = $procmux$880_Y, Q = \mac_beats, rval = 0).
+Adding SRST signal on $procdff$1193 ($dff) from module siege_system (D = $procmux$895_Y, Q = \cycles, rval = 0).
+Adding SRST signal on $procdff$1192 ($dff) from module siege_system (D = $procmux$911_Y, Q = \error, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$1280 ($sdff) from module siege_system (D = $procmux$907_Y, Q = \error).
+Adding EN signal on $procdff$1185 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:53$205_Y [7:0], Q = \banks[0].br).
+Adding SRST signal on $auto$ff.cc:266:slice$1284 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:53$204_Y [7:0], Q = \banks[0].br, rval = 8'00000000).
+Adding EN signal on $procdff$1184 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:52$197_Y [7:0], Q = \banks[0].ar).
+Adding SRST signal on $auto$ff.cc:266:slice$1286 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:52$196_Y [7:0], Q = \banks[0].ar, rval = 8'00000000).
+Adding EN signal on $procdff$1160 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:52$362_Y [7:0], Q = \banks[3].ar).
+Adding SRST signal on $auto$ff.cc:266:slice$1288 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:52$361_Y [7:0], Q = \banks[3].ar, rval = 8'00000000).
+Adding EN signal on $procdff$1161 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:53$370_Y [7:0], Q = \banks[3].br).
+Adding SRST signal on $auto$ff.cc:266:slice$1290 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:53$369_Y [7:0], Q = \banks[3].br, rval = 8'00000000).
+Adding EN signal on $procdff$1177 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:53$260_Y [7:0], Q = \banks[1].br).
+Adding SRST signal on $auto$ff.cc:266:slice$1292 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:53$259_Y [7:0], Q = \banks[1].br, rval = 8'00000000).
+Adding EN signal on $procdff$1176 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:52$252_Y [7:0], Q = \banks[1].ar).
+Adding SRST signal on $auto$ff.cc:266:slice$1294 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:52$251_Y [7:0], Q = \banks[1].ar, rval = 8'00000000).
+Adding SRST signal on $procdff$1202 ($dff) from module siege_system (D = $procmux$719_Y, Q = \k, rval = 7'0000000).
+Adding EN signal on $auto$ff.cc:266:slice$1296 ($sdff) from module siege_system (D = \cmd_k, Q = \k).
+Adding SRST signal on $procdff$1201 ($dff) from module siege_system (D = $procmux$737_Y, Q = \tc, rval = 6'000000).
+Adding EN signal on $auto$ff.cc:266:slice$1302 ($sdff) from module siege_system (D = $procmux$737_Y, Q = \tc).
+Adding EN signal on $procdff$1169 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:53$315_Y [7:0], Q = \banks[2].br).
+Adding SRST signal on $auto$ff.cc:266:slice$1318 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:53$314_Y [7:0], Q = \banks[2].br, rval = 8'00000000).
+Adding SRST signal on $procdff$1204 ($dff) from module siege_system (D = $procmux$670_Y, Q = \lane, rval = 5'00000).
+Adding EN signal on $auto$ff.cc:266:slice$1320 ($sdff) from module siege_system (D = $procmux$670_Y, Q = \lane).
+Adding SRST signal on $procdff$1203 ($dff) from module siege_system (D = $procmux$691_Y, Q = \kk, rval = 7'0000000).
+Adding EN signal on $auto$ff.cc:266:slice$1334 ($sdff) from module siege_system (D = $procmux$691_Y, Q = \kk).
+Adding SRST signal on $procdff$1200 ($dff) from module siege_system (D = $procmux$759_Y, Q = \n, rval = 6'000000).
+Adding EN signal on $auto$ff.cc:266:slice$1352 ($sdff) from module siege_system (D = \cmd_n, Q = \n).
+Adding SRST signal on $procdff$1199 ($dff) from module siege_system (D = $procmux$777_Y, Q = \tr, rval = 4'0000).
+Adding EN signal on $auto$ff.cc:266:slice$1358 ($sdff) from module siege_system (D = $procmux$777_Y, Q = \tr).
+Adding EN signal on $procdff$1168 ($dff) from module siege_system (D = $ternary$rtl/siege_system.v:52$307_Y [7:0], Q = \banks[2].ar).
+Adding SRST signal on $auto$ff.cc:266:slice$1376 ($dffe) from module siege_system (D = $extend$rtl/siege_system.v:52$306_Y [7:0], Q = \banks[2].ar, rval = 8'00000000).
+Adding SRST signal on $procdff$1243 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1046_Y, Q = \accum[15], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1378 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$409_Y, Q = \accum[15]).
+Adding SRST signal on $procdff$1242 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1052_Y, Q = \accum[14], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1380 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$407_Y, Q = \accum[14]).
+Adding SRST signal on $procdff$1239 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1070_Y, Q = \accum[11], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1382 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$401_Y, Q = \accum[11]).
+Adding SRST signal on $procdff$1240 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1064_Y, Q = \accum[12], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1384 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$403_Y, Q = \accum[12]).
+Adding SRST signal on $procdff$1241 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1058_Y, Q = \accum[13], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1386 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$405_Y, Q = \accum[13]).
+Adding SRST signal on $procdff$1205 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $logic_and$rtl/siege_tile.v:18$371_Y, Q = \pipelined.pv, rval = 1'0).
+Adding SRST signal on $procdff$1206 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1031_Y, Q = \pipelined.pf, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$1389 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \in_first, Q = \pipelined.pf).
+Adding SRST signal on $procdff$1207 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1025_Y, Q = \pipelined.pl, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$1391 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \in_last, Q = \pipelined.pl).
+Adding EN signal on $procdff$1208 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $2\pipelined.x[31:0], Q = \pipelined.x).
+Adding EN signal on $procdff$1209 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[0], Q = \pipelined.prod[0]).
+Adding EN signal on $procdff$1210 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[1], Q = \pipelined.prod[1]).
+Adding EN signal on $procdff$1211 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[2], Q = \pipelined.prod[2]).
+Adding EN signal on $procdff$1212 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[3], Q = \pipelined.prod[3]).
+Adding EN signal on $procdff$1213 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[4], Q = \pipelined.prod[4]).
+Adding EN signal on $procdff$1214 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[5], Q = \pipelined.prod[5]).
+Adding EN signal on $procdff$1215 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[6], Q = \pipelined.prod[6]).
+Adding EN signal on $procdff$1216 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[7], Q = \pipelined.prod[7]).
+Adding EN signal on $procdff$1217 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[8], Q = \pipelined.prod[8]).
+Adding EN signal on $procdff$1218 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[9], Q = \pipelined.prod[9]).
+Adding EN signal on $procdff$1219 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[10], Q = \pipelined.prod[10]).
+Adding EN signal on $procdff$1220 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[11], Q = \pipelined.prod[11]).
+Adding EN signal on $procdff$1221 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[12], Q = \pipelined.prod[12]).
+Adding EN signal on $procdff$1222 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[13], Q = \pipelined.prod[13]).
+Adding EN signal on $procdff$1223 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[14], Q = \pipelined.prod[14]).
+Adding EN signal on $procdff$1224 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = \product[15], Q = \pipelined.prod[15]).
+Adding SRST signal on $procdff$1225 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1155_Y, Q = \out_valid, rval = 1'0).
+Adding SRST signal on $procdff$1226 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1143_Y, Q = \closing, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$1475 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1143_Y, Q = \closing).
+Adding SRST signal on $procdff$1227 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $2\i[31:0], Q = \i, rval = 16).
+Adding SRST signal on $procdff$1228 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1136_Y, Q = \accum[0], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1480 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$379_Y, Q = \accum[0]).
+Adding SRST signal on $procdff$1229 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1130_Y, Q = \accum[1], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1482 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$381_Y, Q = \accum[1]).
+Adding SRST signal on $procdff$1230 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1124_Y, Q = \accum[2], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1484 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$383_Y, Q = \accum[2]).
+Adding SRST signal on $procdff$1231 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1118_Y, Q = \accum[3], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1486 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$385_Y, Q = \accum[3]).
+Adding SRST signal on $procdff$1232 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1112_Y, Q = \accum[4], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1488 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$387_Y, Q = \accum[4]).
+Adding SRST signal on $procdff$1233 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1106_Y, Q = \accum[5], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1490 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$389_Y, Q = \accum[5]).
+Adding SRST signal on $procdff$1234 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1100_Y, Q = \accum[6], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1492 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$391_Y, Q = \accum[6]).
+Adding SRST signal on $procdff$1235 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1094_Y, Q = \accum[7], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1494 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$393_Y, Q = \accum[7]).
+Adding SRST signal on $procdff$1236 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1088_Y, Q = \accum[8], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1496 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$395_Y, Q = \accum[8]).
+Adding SRST signal on $procdff$1237 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1082_Y, Q = \accum[9], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1498 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$397_Y, Q = \accum[9]).
+Adding SRST signal on $procdff$1238 ($dff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $procmux$1076_Y, Q = \accum[10], rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$1500 ($sdff) from module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile (D = $add$rtl/siege_tile.v:73$399_Y, Q = \accum[10]).
+
+5.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_system..
+Finding unused cells or wires in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile..
+Removed 142 unused cells and 721 unused wires.
+<suppressed ~158 debug messages>
+
+5.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+<suppressed ~1 debug messages>
+Optimizing module siege_system.
+<suppressed ~4 debug messages>
+
+5.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \siege_system..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~58 debug messages>
+
+5.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+  Optimizing cells in module \siege_system.
+Performed a total of 0 changes.
+
+5.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile'.
+<suppressed ~90 debug messages>
+Finding identical cells in module `\siege_system'.
+<suppressed ~66 debug messages>
+Removed a total of 52 cells.
+
+5.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile..
+Finding unused cells or wires in module \siege_system..
+Removed 0 unused cells and 52 unused wires.
+<suppressed ~2 debug messages>
+
+5.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+Optimizing module siege_system.
+
+5.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \siege_system..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~58 debug messages>
+
+5.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+  Optimizing cells in module \siege_system.
+Performed a total of 0 changes.
+
+5.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile'.
+Finding identical cells in module `\siege_system'.
+Removed a total of 0 cells.
+
+5.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile..
+Finding unused cells or wires in module \siege_system..
+
+5.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile.
+Optimizing module siege_system.
+
+5.23. Finished OPT passes. (There is nothing left to do.)
+
+6. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+Checking read port `\banks[0].amem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+Checking read port `\banks[0].bmem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+Checking read port `\banks[1].amem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+Checking read port `\banks[1].bmem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+Checking read port `\banks[2].amem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+Checking read port `\banks[2].bmem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+Checking read port `\banks[3].amem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+Checking read port `\banks[3].bmem'[0] in module `\siege_system': merging output FF to cell.
+    Write port 0: don't care on collision.
+
+7. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile..
+Finding unused cells or wires in module \siege_system..
+Removed 8 unused cells and 72 unused wires.
+<suppressed ~9 debug messages>
+
+9. Executing CHECK pass (checking for obvious problems).
+Checking module $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile...
+Checking module siege_system...
+Found and reported 0 problems.
+
+10. Printing statistics.
+
+=== $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile ===
+
+   Number of wires:                127
+   Number of wire bits:           2396
+   Number of public wires:          83
+   Number of public wire bits:    1616
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 99
+     $add_24                        16
+     $dffe_16                       16
+     $logic_and_1                    4
+     $logic_not_1                    2
+     $mul_16                        16
+     $mux_1                          5
+     $mux_24                        16
+     $not_1                          1
+     $reduce_and_2                   1
+     $reduce_bool_2                  1
+     $sdff_1                         2
+     $sdffe_1                        3
+     $sdffe_24                      16
+
+=== siege_system ===
+
+   Number of wires:                269
+   Number of wire bits:           2980
+   Number of public wires:          49
+   Number of public wire bits:     780
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                251
+     $add_32                        21
+     $eq_2                           6
+     $eq_3                           5
+     $eq_32                          1
+     $eq_5                           1
+     $gt_32                          3
+     $logic_and_1                   22
+     $logic_and_32                   1
+     $logic_not_1                   13
+     $logic_not_3                    1
+     $logic_not_32                   2
+     $logic_not_4                    1
+     $logic_not_6                    1
+     $logic_not_7                    2
+     $logic_or_1                     7
+     $lt_32                         15
+     $mem_v2                         8
+     $mul_29                         1
+     $mul_32                         1
+     $mux_1                         17
+     $mux_3                         10
+     $mux_32                        29
+     $mux_4                          6
+     $mux_5                          5
+     $mux_6                          6
+     $mux_7                          6
+     $mux_8                         16
+     $ne_2                           5
+     $ne_3                           5
+     $ne_4                           1
+     $ne_5                           1
+     $not_1                          1
+     $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile      1
+     $pmux_3                         1
+     $pmux_4                         1
+     $pmux_5                         1
+     $pmux_6                         1
+     $pmux_7                         1
+     $reduce_and_2                   1
+     $reduce_and_3                   1
+     $reduce_and_5                   1
+     $reduce_and_6                   1
+     $reduce_and_7                   3
+     $reduce_bool_2                  1
+     $reduce_bool_3                  3
+     $sdff_32                        4
+     $sdffe_1                        1
+     $sdffe_3                        1
+     $sdffe_4                        2
+     $sdffe_5                        1
+     $sdffe_6                        2
+     $sdffe_7                        2
+     $shiftx_384                     1
+
+=== design hierarchy ===
+
+   siege_system                      1
+     $paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile      1
+
+   Number of wires:                396
+   Number of wire bits:           5376
+   Number of public wires:         132
+   Number of public wire bits:    2396
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                349
+     $add_24                        16
+     $add_32                        21
+     $dffe_16                       16
+     $eq_2                           6
+     $eq_3                           5
+     $eq_32                          1
+     $eq_5                           1
+     $gt_32                          3
+     $logic_and_1                   26
+     $logic_and_32                   1
+     $logic_not_1                   15
+     $logic_not_3                    1
+     $logic_not_32                   2
+     $logic_not_4                    1
+     $logic_not_6                    1
+     $logic_not_7                    2
+     $logic_or_1                     7
+     $lt_32                         15
+     $mem_v2                         8
+     $mul_16                        16
+     $mul_29                         1
+     $mul_32                         1
+     $mux_1                         22
+     $mux_24                        16
+     $mux_3                         10
+     $mux_32                        29
+     $mux_4                          6
+     $mux_5                          5
+     $mux_6                          6
+     $mux_7                          6
+     $mux_8                         16
+     $ne_2                           5
+     $ne_3                           5
+     $ne_4                           1
+     $ne_5                           1
+     $not_1                          2
+     $pmux_3                         1
+     $pmux_4                         1
+     $pmux_5                         1
+     $pmux_6                         1
+     $pmux_7                         1
+     $reduce_and_2                   2
+     $reduce_and_3                   1
+     $reduce_and_5                   1
+     $reduce_and_6                   1
+     $reduce_and_7                   3
+     $reduce_bool_2                  2
+     $reduce_bool_3                  3
+     $sdff_1                         2
+     $sdff_32                        4
+     $sdffe_1                        4
+     $sdffe_24                      16
+     $sdffe_3                        1
+     $sdffe_4                        2
+     $sdffe_5                        1
+     $sdffe_6                        2
+     $sdffe_7                        2
+     $shiftx_384                     1
+
+11. Executing JSON backend.
+
+12. Executing Verilog backend.
+
+12.1. Executing BMUXMAP pass.
+
+12.2. Executing DEMUXMAP pass.
+Dumping module `$paramod$5013f8286c0008d9a51f73695f216f2ca001d1b5\siege_tile'.
+Dumping module `\siege_system'.
+
+Warnings: 2 unique messages, 4 total
+End of script. Logfile hash: 605f0d8066, CPU: user 0.39s system 0.01s, MEM: 19.27 MB peak
+Yosys 0.33 (git sha1 2584903a060)
+Time spent: 23% 5x opt_expr (0 sec), 14% 4x opt_clean (0 sec), ...
