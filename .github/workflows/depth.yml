@@ -1,0 +1,36 @@
+name: Integrated accelerator and ML evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install remote verification dependencies
+        run: sudo apt-get update -qq && sudo apt-get install -y iverilog yosys && pip install numpy==2.2.6
+      - name: Train, calibrate, and evaluate held-out classifier
+        run: python scripts/train_digits.py > build-ml.log
+      - name: Verify integrated RTL and architectural counters
+        run: python scripts/verify_system.py
+      - name: Prove tile functional refinement
+        run: python scripts/prove_refinement.py
+      - name: Record provenance
+        if: always()
+        run: |
+          mkdir -p build/depth
+          git rev-parse HEAD > build/depth/commit.txt
+          cp build-ml.log build/depth/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integrated-evidence
+          path: build/depth
+          retention-days: 30
