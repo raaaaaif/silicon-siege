@@ -101,7 +101,12 @@ script='read_verilog rtl/siege_tile.v rtl/siege_system.v; hierarchy -top siege_s
 s=subprocess.run(['yosys','-p',script],text=True,capture_output=True);(O/'system-synthesis.log').write_text(s.stdout+s.stderr)
 assert s.returncode==0,s.stdout[-3000:]+s.stderr
 # Exercise the synthesized inferred-memory netlist against the same independent scoreboard.
-subprocess.run(['iverilog','-g2012','-s','tb','-o',str(O/'sim-netlist'),str(O/'system-synth.v'),str(O/'synth_tb.v')],check=True,capture_output=True)
+# Yosys specializes/eliminates top-level parameters; remove only elaboration overrides.
+net_tb=(O/'synth_tb.v').read_text().replace('siege_system #(.P(4),.BITS(8),.ACC(24),.PIPE(1),.PREFETCH(1)) dut','siege_system dut')
+(O/'netlist_tb.v').write_text(net_tb)
+compile_net=subprocess.run(['iverilog','-g2012','-s','tb','-o',str(O/'sim-netlist'),str(O/'system-synth.v'),str(O/'netlist_tb.v')],text=True,capture_output=True)
+(O/'netlist-compile.log').write_text(compile_net.stdout+compile_net.stderr)
+assert compile_net.returncode==0,compile_net.stdout+compile_net.stderr
 net=subprocess.run(['vvp',str(O/'sim-netlist')],text=True,capture_output=True)
 (O/'system-netlist-simulation.log').write_text(net.stdout+net.stderr)
 assert net.returncode==0,net.stdout+net.stderr
