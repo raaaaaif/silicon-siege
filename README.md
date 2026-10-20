@@ -4,6 +4,10 @@
 
 An interactive, adversarial accelerator-design lab bridging digital ECE, computer architecture and machine learning. Change a streaming integer GEMM tile, inspect its clock-by-clock behavior, search a constrained design space, and challenge the result with bandwidth starvation, outliers, ragged shapes and overflow. A restrained pixel-art circuit island makes the mechanics approachable; experiments and downloadable hardware evidence are the core of the project.
 
+![Live Silicon Siege workbench](docs/screenshots/workbench.jpg)
+
+[Release verification and known boundaries](docs/VALIDATION.md)
+
 ## Run locally
 
 Requires Node 22+ and Python 3 for the independent-oracle test. No npm dependencies, build step, Docker, or EDA installation is required locally.
