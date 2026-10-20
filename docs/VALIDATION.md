@@ -1,6 +1,6 @@
-# Original v1.0 release validation — 20 October 2026
+# Original v1.0 release validation ;  20 October 2026
 
-This records the first release. The later System lab adds a trained model and unbounded single-lane refinement; see the published integrated evidence for that scope.
+This records the first release. The later System lab adds a trained model and unbounded single-lane refinement; see [system architecture and measurements](MEASUREMENTS.md) and the published integrated evidence for that scope.
 
 Live site: https://silicon-siege.pages.dev/
 
@@ -11,7 +11,7 @@ Live site: https://silicon-siege.pages.dev/
 - [Physical CI](https://github.com/raaaaaif/silicon-siege/actions/runs/39501334783): routed GDS produced. Representative tile: 16,303.9 µm² standard-cell area, +6.93734 ns worst setup slack, +0.00896738 ns worst hold slack at the declared 10 ns clock. Zero route DRC, setup, hold, capacitance and slew violations.
 - [Application CI](https://github.com/raaaaaif/silicon-siege/actions/runs/39503163785): model and Worker contracts pass on hosted Node 22.
 - The first physical run had two capacitance violations. Added repair margins and reran without relaxing the timing constraints; the published run is the repaired result. The CI now gates the electrical/timing counts as well as tool completion.
-- Published benchmark: 1,620 evaluations (five seeds × three workloads × three methods × 36 calls). Fixed heuristic mean objective 0.465, adaptive surrogate 0.475, random 0.539. This favors neither a fabricated AI advantage nor a general superiority claim.
+- Published benchmark: 1,620 evaluations (five seeds × three workloads × three methods × 36 calls). Fixed heuristic mean objective 0.465, adaptive surrogate 0.475, random 0.539. These results apply to the fixed synthetic suite.
 
 ## Manual Chrome checks on the real interface
 
@@ -27,7 +27,7 @@ Performed through browser/computer use, on both the local server and the public 
 - Public experiment: 108 evaluations completed with the three curves and independently published multi-seed summary.
 - Public physical layout loaded at its actual 1100×1100 resolution; raw GDS and evidence JSON match local artifacts.
 - Mobile viewport 390×844: visible navigation, no horizontal document overflow, controls work, 8×8 array and PE 7,7 remain selectable. Restored the browser viewport after testing.
-- Production cloud mentor: generated an ACC32 proposal; the browser measured 996 cycles / 0.67% NRMSE and reproduced that after application. It was **slower** than the starting design, and the UI disclosed +2.5% latency. Valid and feasible do not mean superior.
+- Production cloud mentor: generated an ACC32 proposal; the browser measured 996 cycles / 0.67% NRMSE and reproduced that after application. It was slower than the starting design; the UI displayed +2.5% latency.
 - No browser console errors observed in the final live checks.
 
 ## Repairs from live testing
@@ -50,7 +50,7 @@ This validates the stated digital, model and academic physical-design contracts.
 
 The later [integrated workflow](https://github.com/raaaaaif/silicon-siege/actions/runs/39505161076) passes 48 configurations and 384 matrix transactions, independent result/counter checks, synthesized inferred-memory netlist replay, both controller mutations, and four unbounded single-lane refinement proofs. The browser test suite now has 19 passing tests, including all 21,564 integer classifier predictions and all 384 measured performance records. Selector tests remove test outcomes entirely and verify that architecture selection remains identical.
 
-The [matched routed timing experiment](https://github.com/raaaaaif/silicon-siege/actions/runs/39504591731) completes both direct and pipelined 4×4 INT8 ACC24 tiles at the same 2 ns clock and 0.4 ns input/output delays. Both pass setup/hold, capacitance/slew, and routing checks. Exact numbers and scope are in `web/evidence/timing-ablation.json`.
+The [matched routed timing experiment](https://github.com/raaaaaif/silicon-siege/actions/runs/39504591731) completes both direct and pipelined 4×4 INT8 ACC24 tiles at the same 2 ns clock and 0.4 ns input/output delays. Both pass setup/hold, capacitance/slew, and routing checks. Exact numbers and scope are in `web/evidence/timing-ablation.json` and [MEASUREMENTS.md](MEASUREMENTS.md).
 
 Repair history: inferred-memory synthesis initially checked the intermediate graph before dead-cell cleanup; the standard cleanup pass resolved its dangling intermediate nodes, while `check -assert` remains enabled. A new synthesized-netlist replay confirms behavior after cleanup. The netlist testbench needed parameter overrides removed because synthesis specializes those parameters. Neither hardware constraints nor oracle comparisons were relaxed. The first INT8 magnitude/sign formal reference timed out; the published successful harness uses a shared mathematical multiplication primitive and independently tracks sequential state, with that limitation documented.
 
@@ -60,4 +60,4 @@ Cloudflare production deployment succeeded with 45 uploaded files (including thr
 
 Chrome checks on the deployed System lab reproduced INT8/channel/ACC16 accuracy of 2.23%, then exercised the constrained selector: 48 of 96 candidates passed its default limits; it selected 4×4 INT4/tensor/ACC16, 806 active clocks, 4,737.2 µm² mapped tile area and 97.07% validation accuracy. The separately displayed test accuracy was 95.21%; selection does not substitute that outcome for validation. The downloaded inference JSON contains the 64 input pixels, both integer model layers, configuration, intermediate tensors and prediction.
 
-Local and production checks cover pixel perturbation without recalibration, restore, next example, misclassification discovery, serialized/overlapped scheduling, array size changes, impossible area limits, and navigation back to the original Workbench. At 390×844 the document width is 390 pixels, navigation remains accessible, and pixel/architecture controls work. Temporary viewport overrides were reset. No new console errors were observed in the fresh production tab. A genuine live screenshot is saved in `docs/screenshots/system-lab.jpg`.
+Local and production checks cover pixel perturbation without recalibration, restore, next example, misclassification discovery, serialized/overlapped scheduling, array size changes, impossible area limits, and navigation back to the original Workbench. At 390×844 the document width is 390 pixels, navigation remains accessible, and pixel/architecture controls work. Temporary viewport overrides were reset. No new console errors were observed in the fresh production tab. A production screenshot is saved in `docs/screenshots/system-lab.jpg`.

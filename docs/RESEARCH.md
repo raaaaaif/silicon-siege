@@ -1,42 +1,46 @@
-# Silicon Siege: engineering position and research record
+# Research and search experiments
 
-Research checked 20 October 2026. The project combines digital design, architecture and ML systems with an interactive browser interface. This is not a claim of industrial EDA state of the art or novel autonomous RTL generation.
+Research checked 20 October 2026.
 
-## Differentiation after reviewing the field
+## Related work
 
-**Gemmini** ([Genc et al.](https://arxiv.org/abs/1911.09925)) establishes how much accelerator evaluation depends on the full stack. That directly motivates the boundary in this project: the measured hardware is a streaming compute tile; host scheduling and memory are explicit models. We do not describe tile results as whole-system speedups.
+Gemmini ([Genc et al.](https://arxiv.org/abs/1911.09925)) evaluates accelerator hardware alongside its memory system and software stack. Silicon Siege includes a standalone banked-memory controller; it does not implement Gemmini's CPU or SoC integration.
 
-**Timeloop** ([Parashar et al.](https://accelergy.mit.edu/timeloop.pdf)) separates architectural mappings and access counts from technology costs. Silicon Siege likewise exposes tile order, transfer accounting and stalls separately from standard-cell synthesis. Its lightweight cache model is much narrower than Timeloop and is not a replacement for it.
+Timeloop ([Parashar et al.](https://accelergy.mit.edu/timeloop.pdf)) separates mappings and access counts from technology costs. The Workbench similarly reports its cache/transfer model separately from standard-cell area. Its LRU cache model covers fewer architectural effects than Timeloop.
 
-**SmoothQuant** ([Xiao et al.](https://arxiv.org/abs/2211.10438), [implementation](https://github.com/mit-han-lab/smoothquant)) motivates testing outliers and being precise about numerical evaluation. This project implements symmetric quantization with per-tensor activations and either per-tensor or per-output-channel weights. It does not implement SmoothQuant. Its NRMSE is a GEMM error metric, not classification accuracy or language-model quality.
+SmoothQuant ([Xiao et al.](https://arxiv.org/abs/2211.10438), [implementation](https://github.com/mit-han-lab/smoothquant)) addresses activation outliers in quantization. Silicon Siege uses symmetric per-tensor activation scaling and per-tensor or per-output-channel weight scaling; it does not implement SmoothQuant. The Workbench reports GEMM NRMSE. The System lab separately reports held-out classifier accuracy.
 
-**RTL-OPT** ([Lu et al.](https://arxiv.org/abs/2601.01765)) evaluates functionality and optimization quality together. That influenced the independent reference oracle, mutation testing, area reports and rejection of overflow-producing candidates. Passing a parser or generating plausible RTL is insufficient.
+RTL-OPT ([Lu et al.](https://arxiv.org/abs/2601.01765)) evaluates functionality alongside optimization. Dr. RTL ([Fang et al.](https://arxiv.org/abs/2604.14989), [source](https://github.com/hkust-zhiyao/Dr_RTL)) studies agent-driven RTL optimization. Silicon Siege's search selects parameters of fixed hardware; its cloud model does not generate HDL.
 
-**Dr. RTL** ([Fang et al.](https://arxiv.org/abs/2604.14989), [source](https://github.com/hkust-zhiyao/Dr_RTL)) already explores agentic, tool-grounded RTL optimization. Consequently, the defensible wedge here is the human-interactive adversarial co-design environment with replayable evidence. Silicon Siege uses a bounded architecture grammar; it does not claim arbitrary LLM-generated RTL has been verified.
+OpenROAD ([flow documentation](https://openroad-flow-scripts.readthedocs.io/en/latest/mainREADME.html)) supplies the RTL-to-layout flow. The published Nangate45 results are compute-tile measurements on an academic technology platform.
 
-**OpenROAD** ([official flow](https://openroad-flow-scripts.readthedocs.io/en/latest/mainREADME.html)) makes a real remote RTL-to-layout artifact feasible. The representative Nangate45 layout is an educational technology result, not manufactured silicon, foundry signoff or measured power.
+## Search model
 
-## Falsifiable experiment
+The Workbench search space contains 1,296 configurations. Features encode each parameter by its normalized position in its finite domain. The surrogate uses RBF-weighted observed objectives. Its acquisition function subtracts a nearest-observation distance bonus from the predicted objective. This distance is an exploration heuristic, not a calibrated uncertainty estimate or Gaussian-process posterior.
 
-Question: under a fixed 36-evaluation budget, does an adaptive surrogate find lower constrained objectives more reliably than random search or a fixed engineering heuristic?
+Methods share the evaluator, starting configuration, budget and six-evaluation warmup. Random search samples without replacement. The fixed heuristic orders configurations by precision, accumulator width, scale mode, tile order and resource choices without using observed objectives. Adaptive search ranks remaining candidates by acquisition and makes a random exploratory query every fifth iteration after warmup. The greedy ablation removes both exploration mechanisms.
 
-The experiment covers three synthetic kernels and five search seeds. Each method starts from the same architecture. Each receives the same budget and evaluator. The first six evaluations are the common baseline plus seeded random warmup; subsequently the heuristic uses a fixed ordering, random samples without replacement, and the surrogate combines kernel-regression prediction with a distance-based exploration bonus. Every fifth surrogate iteration explores randomly. The published JSON retains every evaluated configuration and objective.
+## Original five-seed comparison
 
-Initial measured result: adaptive mean best objective **0.475**, random **0.539**, heuristic **0.465**; lower is better. Adaptive and heuristic found feasible results in 15/15 runs; random in 14/15. These are observed on this synthetic suite. The fixed baseline slightly beats the adaptive average; the product does not conceal that negative result. This does not establish a general advantage or statistical significance.
+Five seeds, three synthetic kernels, three methods and 36 evaluations per run produce 1,620 evaluations. Mean best objective is 0.475 for adaptive search, 0.539 for random search and 0.465 for the fixed heuristic; lower is better. Adaptive and heuristic find feasible designs in 15/15 runs, random in 14/15. The reported standard deviations combine workload and seed variation and are not confidence intervals.
 
-The regression is intentionally small and auditable: radial-basis weighted observations, normalized ordinal/categorical features, distance-based exploration. Its uncertainty is a heuristic, not a GP posterior. Search is trained on modeled performance/resource/error measurements, not on the physical-design run. Standard-cell area is shown separately, not smuggled into an uncalibrated system PPA score.
+Reproduce with `npm run experiments`. Results are in `web/evidence/experiments.json`.
 
-## Stress-testing the project itself
+## Exhaustive-reference comparison
 
-| Objection | Implemented answer | Remaining scientific boundary |
-|---|---|---|
-| Just an attractive dashboard | Executed RTL verification, a standard-cell sweep, bounded SAT checks and a routed GDS | No fabrication or board bring-up |
-| The visuals invent computation | JS tile controller matches the same independent Python vectors used by Icarus, 49,344 edges | System cache/DRAM timing remains a model |
-| The agent might break arithmetic | Every candidate is evaluated; overflows reject it; cloud proposals must pass legal-domain validation | No arbitrary HDL generation |
-| Signed arithmetic is under-tested | Full signed extrema, negative values, randomized vectors, 36 configurations, two caught mutations | Simulation is not a full functional proof |
-| AI search beats an unfair baseline | Equal budgets, common start/warmup, seeded data and raw trajectories | Three small kernels; no broad benchmark claim |
-| Quantization “accuracy” is misleading | Report numerical NRMSE and per-element errors, not task accuracy | No trained network or independent calibration dataset |
-| Physical numbers are proxies | Use raw Nangate45 cell area and routed STA, with hashes and constraints | No activity-annotated power measurement |
-| Guests could consume unlimited EDA | No public CI dispatch; browser-local exploration; cloud mentor quotas | Global AI quota can be exhausted, local lab remains functional |
-| Local storage blocks the engineering | Zero npm dependencies; remote EDA; only compact reports, source and GDS downloaded | Reproducing EDA locally still requires the documented toolchain |
+The expanded experiment uses 20 paired seeds, three fixed kernels, four methods and the same 36-evaluation budget. Each kernel's entire 1,296-configuration space is evaluated to establish its reference optimum. Regret is the selected objective minus that optimum. Confidence intervals resample seeds as clusters, keeping the three kernels paired within each sampled seed; they are conditional on this workload suite.
 
+| Method | Mean regret | Frozen-design stress passes |
+| --- | --- | --- |
+| Fixed heuristic | 0.02197 | 60/180 |
+| Adaptive RBF | 0.04505 | 74/180 |
+| RBF without exploration | 0.09412 | 66/180 |
+| Random | 0.17383 | 48/180 |
+
+Adaptive-minus-heuristic mean regret is +0.02308, with a 95% seed-cluster interval of [+0.01339, +0.03299]. The heuristic performs better on the nominal objective. Stress transfer freezes the selected design before bandwidth, outlier and shape changes. Adaptive search passes more of these fixed stress cases. The experiments do not establish performance on other workloads or physical PPA.
+
+Reproduce with `npm run audit-search`. Raw trajectories, reference optima and intervals are in `web/evidence/search-audit.json`.
+
+## Classifier co-design
+
+The System lab uses a separate exact selector over 96 hardware/scaling combinations. It filters on validation accuracy and mapped MAC-tile area, then minimizes active clocks, tile area and negative validation accuracy in that order. Held-out test results do not participate in selection. Its trained-model and RTL experiments are described in [system architecture and measurements](MEASUREMENTS.md).

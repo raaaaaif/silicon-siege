@@ -1,6 +1,6 @@
-> The original Workbench architecture below remains supported. The separate System lab implements a banked-memory controller and trained integer classifier; its contracts and numerical specification are recorded in the integrated evidence. Do not apply the original cache-model assumptions to the subsystem RTL.
+# Browser model and API contracts
 
-# Architecture and model contract
+This document describes the Workbench model. The System lab has a separate banked-memory controller and trained classifier, documented in [system architecture and measurements](MEASUREMENTS.md).
 
 ## Runtime
 
@@ -8,7 +8,7 @@ The browser executes plain ES modules with no package dependencies or build step
 
 Cloudflare Pages serves assets directly. Only `/api/*` invokes `_worker.js`. The mentor uses Workers AI `@cf/qwen/qwen3-30b-a3b-fp8`, a catalog model checked against [official model documentation](https://developers.cloudflare.com/workers-ai/models/qwen3-30b-a3b-fp8/). D1 `BUDGET` uses conditional atomic increments to cap model calls at 64/day globally and 8/day per hashed source IP. The cap is checked before inference; database errors fail closed. An unsuccessful inference still consumes an attempt. No arbitrary prompts, HDL, code execution or GitHub workflow dispatch is exposed. Fixed question intents and finite design domains bound the API input. The model selects a typed strategy and optional configuration. Free-form model prose is never rendered: rationale templates and numerical statements are derived from bounded observations. This boundary was added after live testing caught a false accumulator explanation. Returned configurations are validated on both server and client and independently evaluated before application.
 
-Only a daily hash of the source IP and request counters are persisted in D1. Raw IPs and prompts are not stored by this application. Old budget keys are removed after three days. Inference context goes to Cloudflare Workers AI. Browser-local saved progress and experiment history are not uploaded. Origin checks reduce browser abuse; they are not authentication. Network-level callers can forge Origin, but the atomic global quota remains the spending boundary. The user's Free plan is retained; no paid upgrades or API secrets are required.
+Only a daily hash of the source IP and request counters are persisted in D1. Raw IPs and prompts are not stored by this application. Old budget keys are removed after three days. Inference context goes to Cloudflare Workers AI. Browser-local saved progress and experiment history are not uploaded. Origin checks reduce browser abuse; they are not authentication. Network-level callers can forge Origin, but the atomic global quota remains the spending boundary. The deployment uses Cloudflare Pages, Workers AI and D1; credentials are not included in client code.
 
 ## RTL contract
 
@@ -36,7 +36,7 @@ Nibbles are packed in the traffic model. This is an abstract bandwidth assumptio
 6. Yosys + Nangate45: 36 mapped standard-cell areas. Host/memory/IO/routing excluded.
 7. OpenROAD: 4×4 INT8 ACC24 registered tile, full physical flow, 100 MHz target, explicit IO and uncertainty constraints. Academic technology, not silicon measurement. Raw reports preserved.
 
-Do not combine analytical resource cost, mapped cell area and routed area as if they were equivalent. Do not call a modeled energy proxy “power.” This implementation intentionally does not show a power score.
+Analytical resource cost, mapped cell area and routed cell area are separate quantities. The application reports no power measurement or energy score.
 
 ## Reproducibility
 

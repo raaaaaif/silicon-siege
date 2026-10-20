@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#101c23" />
     <meta
       name="description"
-      content="A hands-on chip architecture lab. Design an integer accelerator, challenge it with adversarial workloads, and inspect real RTL verification and physical-design evidence."
+      content="Interactive integer-accelerator design, quantized neural-network inference, RTL verification and physical-design measurements."
     />
-    <title>Silicon Siege — Make every cycle count.</title>
+    <title>Silicon Siege | Accelerator design lab</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/style.css" />
   </head>
@@ -45,19 +45,19 @@
             <div class="eyebrow">
               ECE × COMPUTER ARCHITECTURE × MACHINE LEARNING
             </div>
-            <h1>Make every cycle count<span>.</span></h1>
+            <h1>Integer accelerator workbench</h1>
             <p>
-              Design a tiny accelerator. Find its limits. Improve it with
-              evidence.
+              Configure a GEMM tile and inspect its execution, numerical error
+              and memory traffic.
               <button class="text-btn" data-open="lab">
-                Explore the real ML + RTL system lab ↗
+                Open the classifier and system lab ↗
               </button>
             </p>
           </div>
           <div class="intro-status">
             <span class="status-dot"></span
             ><span
-              >YOUR DESIGN, UNDER PRESSURE<small id="milestones"
+              >DESIGN BRIEF STATUS<small id="milestones"
                 >0 of 3 design briefs verified</small
               ></span
             ><button
@@ -81,7 +81,7 @@
               <span class="eyebrow">01 / ARCHITECTURE</span
               ><button class="text-btn" id="reset">Reset</button>
             </div>
-            <h2>Your silicon, your trade-offs.</h2>
+            <h2>Architecture parameters</h2>
             <div id="controls"></div>
             <div class="budget-box">
               <span
@@ -100,7 +100,7 @@
             <button class="button primary full" id="evaluate">
               Run evaluation <span>↗</span>
             </button>
-            <p class="micro">Deterministic. Local. Reproducible.</p>
+            <p class="micro">Evaluation runs locally in this browser.</p>
           </aside>
           <section class="center-column">
             <div class="card canvas-card">
@@ -222,15 +222,15 @@
                 ></div>
                 <div>
                   <h2>Meet Pip.</h2>
-                  <p>A curious architect. A demanding verifier.</p>
+                  <p>Architecture search and verification.</p>
                 </div>
               </div>
               <div id="agentLog" class="agent-log" aria-live="polite">
                 <div class="agent-message">
                   <b>PIP / ARCHITECT</b>
                   <p>
-                    Start with a design brief. I’ll explore the trade-offs; you
-                    decide what makes the cut.
+                    Select a brief, then explore candidate configurations and compare
+                    their measured results.
                   </p>
                 </div>
               </div>
@@ -281,7 +281,7 @@
           <div class="section-head">
             <div>
               <span class="eyebrow">DESIGN SPACE</span>
-              <h2>There is no single best chip.</h2>
+              <h2>Candidate tradeoffs</h2>
             </div>
             <span class="micro" id="frontierCount"
               >Run the architect to compare candidates.</span
@@ -309,10 +309,10 @@
       <section id="lab" class="view">
         <div class="page-heading">
           <div class="eyebrow">FROM ML ACCURACY TO RTL TRANSACTIONS</div>
-          <h1>Make the whole system accountable.</h1>
+          <h1>Quantized classifier and accelerator</h1>
           <p>
-            A real trained classifier. A banked-memory accelerator. Independent
-            evidence connecting the two.
+            Run integer inference and compare the corresponding banked-memory
+            accelerator configurations.
           </p>
         </div>
         <div id="labContent">
@@ -324,7 +324,7 @@
       <section id="experiments" class="view">
         <div class="page-heading">
           <div class="eyebrow">CONTROLLED EXPERIMENTS</div>
-          <h1>Let the measurements argue.</h1>
+          <h1>Search comparison</h1>
           <p>
             Compare adaptive search, random sampling, and a fixed engineering
             heuristic under the same evaluation budget.
@@ -351,7 +351,7 @@
               max="999999"
               value="42" /></label
           ><button class="button primary" id="runExperiment">
-            Run fair comparison ↗
+            Run comparison ↗
           </button>
         </div>
         <div id="experimentStatus" role="status" class="micro left"></div>
@@ -374,17 +374,17 @@
         </div>
         <div id="experimentResults"></div>
         <div class="card prose" id="publishedExperiments">
-          <h2>Reproducibility beats a lucky run.</h2>
+          <h2>Published multi-seed results</h2>
           <p>Loading the published multi-seed experiment…</p>
         </div>
       </section>
       <section id="evidence" class="view">
         <div class="page-heading">
-          <div class="eyebrow">SHOW YOUR WORK</div>
-          <h1>Pretty pixels. Inspectable proof.</h1>
+          <div class="eyebrow">VERIFICATION AND PHYSICAL DESIGN</div>
+          <h1>Hardware measurements</h1>
           <p>
-            Real hardware tools run remotely. Their results live here alongside
-            the exact scope, toolchain, and limitations.
+            RTL simulation, formal checks, synthesis and routed timing reports
+            with source hashes and toolchain details.
           </p>
         </div>
         <div id="evidenceContent">
@@ -394,39 +394,38 @@
       <section id="guide" class="view">
         <div class="page-heading">
           <div class="eyebrow">THE FIELD GUIDE</div>
-          <h1>Understand the trade-off.</h1>
+          <h1>Architecture reference</h1>
           <p>
-            A short path from “what is a MAC?” to the assumptions behind this
-            experiment.
+            Workbench controls, arithmetic definitions and model assumptions.
           </p>
         </div>
         <div class="guide-grid">
           <div class="card prose">
             <div class="sprite portrait architect-bot" aria-hidden="true"></div>
-            <h2>Three minutes in the foundry</h2>
+            <h2>Workbench controls</h2>
             <ol>
               <li>
-                <b>Choose a brief.</b> Each kernel has a latency, resource, and
+                Choose a brief. Each kernel has a latency, resource, and
                 numerical-error budget.
               </li>
               <li>
-                <b>Change the architecture.</b> Bigger arrays add parallelism,
+                Change the architecture. Bigger arrays add parallelism,
                 but also cost more and need data faster.
               </li>
               <li>
-                <b>Run an evaluation.</b> Inspect a processing element and step
+                Run an evaluation. Inspect a processing element and step
                 through the actual integer computation.
               </li>
               <li>
-                <b>Challenge the design.</b> The adversary picks the worst of
+                Challenge the design. The adversary picks the worst of
                 four defined workload perturbations.
               </li>
               <li>
-                <b>Ask for a proposal.</b> Compare the architect’s measured
+                Ask for a proposal. Compare the architect’s measured
                 candidate, apply it, and rerun.
               </li>
               <li>
-                <b>Open Evidence.</b> See the RTL, independent tests, synthesis,
+                Open Evidence. See the RTL, independent tests, synthesis,
                 physical-design results, and limitations.
               </li>
             </ol>
@@ -435,24 +434,24 @@
             </button>
           </div>
           <div class="card prose">
-            <h2>The engineering contract</h2>
+            <h2>Model components</h2>
             <p>
-              <b>ECE:</b> a synthesizable signed streaming outer-product array,
+              ECE: a synthesizable signed streaming outer-product array,
               optional product register, finite-width accumulation, synchronous
               reset, and valid/ready flow control.
             </p>
             <p>
-              <b>Computer architecture:</b> host-scheduled tiles, scratchpad
+              Computer architecture: host-scheduled tiles, scratchpad
               cache model, transfer accounting, memory stalls, utilization, tile
               reuse, and constrained design-space exploration.
             </p>
             <p>
-              <b>ML systems:</b> integer quantization against a floating-point
+              ML systems: integer quantization against a floating-point
               GEMM oracle, per-tensor versus per-output-channel weight scaling,
               numerical outliers, and surrogate-guided search.
             </p>
             <p>
-              <b>Research:</b> independent differential tests, intentional
+              Research: independent differential tests, intentional
               defect detection, bounded invariants, standard-cell synthesis,
               physical-design evidence, matched-budget baselines, reproducible
               seeds.
@@ -460,11 +459,11 @@
           </div>
         </div>
         <div class="card prose">
-          <h2>A model with visible boundaries.</h2>
+          <h2>Definitions and assumptions</h2>
           <div id="glossary"></div>
         </div>
         <div class="card prose">
-          <h2>Research that shaped the lab</h2>
+          <h2>Related work</h2>
           <div class="sources">
             <a
               href="https://arxiv.org/abs/1911.09925"
@@ -481,7 +480,7 @@
               rel="noopener"
               ><b>Timeloop ↗</b
               ><span
-                >Make data movement and mapping assumptions explicit.</span
+                >Architectural mappings and data-movement analysis.</span
               ></a
             ><a
               href="https://arxiv.org/abs/2211.10438"
@@ -507,8 +506,7 @@
               rel="noopener"
               ><b>Dr. RTL ↗</b
               ><span
-                >Tool-grounded optimization is established research. Our focus
-                is interactive adversarial co-design.</span
+                >Agent-driven RTL optimization and evaluation.</span
               ></a
             ><a
               href="https://openroad-flow-scripts.readthedocs.io/en/latest/mainREADME.html"
@@ -522,17 +520,17 @@
             >
           </div>
           <p class="muted">
-            This project makes no claim to outperform industrial EDA or to have
-            invented autonomous chip design. Its contribution is a coherent,
-            inspectable co-design environment under a small compute budget.
+            The Workbench uses a fixed parameterized RTL tile and an analytical
+            memory model. The System lab has a separate banked-memory controller
+            and trained classifier.
           </p>
         </div>
       </section>
     </main>
     <footer>
       <span>SILICON / SIEGE <b>v1.1</b></span
-      ><span>Built to be questioned. Designed to be understood.</span
-      ><span>Browser model + real RTL evidence</span>
+      ><span>Integer arithmetic · memory scheduling · verification</span
+      ><span>Browser models and RTL measurements</span>
     </footer>
     <dialog id="detailDialog">
       <div class="dialog-head">
