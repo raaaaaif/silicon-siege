@@ -21,6 +21,7 @@ jobs:
       - name: Verify integrated RTL and architectural counters
         run: python scripts/verify_system.py
       - name: Prove tile functional refinement
+        if: always()
         run: python scripts/prove_refinement.py
       - name: Record provenance
         if: always()

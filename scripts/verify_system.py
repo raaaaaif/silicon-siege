@@ -97,6 +97,7 @@ endmodule'''
      rows.append(dict(p=p,bits=bits,acc=acc,pipe=pipe,prefetch=prefetch,cases=meta));print(name,'PASS',flush=True)
 # Confirm complete subsystem synthesizes; preserve inferred synchronous memories, not fake SRAM area.
 script='read_verilog rtl/siege_tile.v rtl/siege_system.v; hierarchy -top siege_system; proc; opt; memory_dff; memory_collect; check -assert; stat -width; write_json build/depth/system-netlist.json'
-s=subprocess.run(['yosys','-p',script],text=True,capture_output=True,check=True);(O/'system-synthesis.log').write_text(s.stdout)
+s=subprocess.run(['yosys','-p',script],text=True,capture_output=True);(O/'system-synthesis.log').write_text(s.stdout+s.stderr)
+assert s.returncode==0,s.stdout[-3000:]+s.stderr
 report=dict(schema=1,configurations=len(rows),cases=sum(len(r['cases']) for r in rows),rows=rows,rtl_sha256={f:hashlib.sha256(pathlib.Path('rtl/'+f).read_bytes()).hexdigest() for f in ['siege_tile.v','siege_system.v']},scope='RTL simulation + synthesis with inferred memories. No SRAM macro mapping, AXI integration or physical timing claim for this subsystem.',tool=subprocess.check_output(['iverilog','-V'],text=True,stderr=subprocess.DEVNULL).splitlines()[0])
 (O/'system.json').write_text(json.dumps(report,indent=2))
