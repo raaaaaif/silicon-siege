@@ -11,13 +11,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Pull official OpenROAD flow (remote only)
         run: |
-          docker pull openroad/orfs:latest
+          docker pull openroad/orfs@sha256:ac327587b71c3ce1fea813f4efcf966644daa90c9fadc8f93ee2e4b4c1d64842
           mkdir -p build/physical
-          docker inspect --format='{{index .RepoDigests 0}}' openroad/orfs:latest > build/physical/image-digest.txt
+          docker inspect --format='{{index .RepoDigests 0}}' openroad/orfs@sha256:ac327587b71c3ce1fea813f4efcf966644daa90c9fadc8f93ee2e4b4c1d64842 > build/physical/image-digest.txt
           git rev-parse HEAD > build/physical/commit.txt
       - name: Run 4x4 INT8 ACC24 pipelined tile to routed layout
         run: |
-          docker run --name siege-physical -v "$PWD:/work" -w /OpenROAD-flow-scripts/flow --entrypoint bash openroad/orfs:latest -lc 'source /OpenROAD-flow-scripts/env.sh; make DESIGN_CONFIG=/work/rtl/physical.mk'
+          docker run --name siege-physical -v "$PWD:/work" -w /OpenROAD-flow-scripts/flow --entrypoint bash openroad/orfs@sha256:ac327587b71c3ce1fea813f4efcf966644daa90c9fadc8f93ee2e4b4c1d64842 -lc 'source /OpenROAD-flow-scripts/env.sh; make DESIGN_CONFIG=/work/rtl/physical.mk'
       - name: Collect physical evidence
         if: always()
         run: |
