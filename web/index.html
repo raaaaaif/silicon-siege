@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#101c23" />
+    <meta
+      name="description"
+      content="A hands-on chip architecture lab. Design an integer accelerator, challenge it with adversarial workloads, and inspect real RTL verification and physical-design evidence."
+    />
+    <title>Silicon Siege — Make every cycle count.</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to workbench</a>
+    <header class="topbar">
+      <a href="#workbench" class="brand" aria-label="Silicon Siege home"
+        ><span class="brand-chip" aria-hidden="true">▦</span
+        ><span
+          >SILICON<span class="brand-muted"> / </span>SIEGE<small
+            >THE ADVERSARIAL CHIP LAB</small
+          ></span
+        ></a
+      >
+      <nav aria-label="Main navigation">
+        <button class="nav active" data-view="workbench">Workbench</button
+        ><button class="nav" data-view="experiments">Experiments</button
+        ><button class="nav" data-view="evidence">Evidence</button
+        ><button class="nav" data-view="guide">Field guide</button>
+      </nav>
+      <a
+        class="source-link"
+        href="https://github.com/raaaaaif/silicon-siege"
+        target="_blank"
+        rel="noopener"
+        >Source <span>↗</span></a
+      >
+    </header>
+    <main id="main">
+      <section id="workbench" class="view active">
+        <div class="intro">
+          <div>
+            <div class="eyebrow">
+              ECE × COMPUTER ARCHITECTURE × MACHINE LEARNING
+            </div>
+            <h1>Make every cycle count<span>.</span></h1>
+            <p>
+              Design a tiny accelerator. Find its limits. Improve it with
+              evidence.
+            </p>
+          </div>
+          <div class="intro-status">
+            <span class="status-dot"></span
+            ><span
+              >YOUR DESIGN, UNDER PRESSURE<small id="milestones"
+                >0 of 3 design briefs verified</small
+              ></span
+            ><button
+              class="icon-btn"
+              id="tour"
+              aria-label="Start guided walkthrough"
+              title="A 3-minute walkthrough"
+            >
+              ?
+            </button>
+          </div>
+        </div>
+        <div
+          class="mission-tabs"
+          id="missions"
+          aria-label="Choose a design brief"
+        ></div>
+        <div class="workbench-grid">
+          <aside class="card architecture">
+            <div class="section-head">
+              <span class="eyebrow">01 / ARCHITECTURE</span
+              ><button class="text-btn" id="reset">Reset</button>
+            </div>
+            <h2>Your silicon, your trade-offs.</h2>
+            <div id="controls"></div>
+            <div class="budget-box">
+              <span
+                >Resource budget
+                <button
+                  class="help-dot"
+                  data-term="Resource budget"
+                  aria-label="Explain resource budget"
+                >
+                  ?
+                </button></span
+              ><b id="budgetValue"></b>
+              <div class="meter"><i id="budgetBar"></i></div>
+              <small>Relative cost model · not physical area</small>
+            </div>
+            <button class="button primary full" id="evaluate">
+              Run evaluation <span>↗</span>
+            </button>
+            <p class="micro">Deterministic. Local. Reproducible.</p>
+          </aside>
+          <section class="center-column">
+            <div class="card canvas-card">
+              <div class="section-head">
+                <div class="eyebrow">
+                  02 / LIVE FABRIC <span class="live-dot"></span>
+                </div>
+                <div class="segmented compact" id="visualModes">
+                  <button class="active" data-mode="world">Foundry</button
+                  ><button data-mode="schematic">Schematic</button>
+                </div>
+              </div>
+              <div class="world" id="world">
+                <img
+                  class="world-bg"
+                  src="/assets/pixel-world.png"
+                  alt="Pixel-art circuit island with ceramic chips and copper paths"
+                  fetchpriority="high"
+                />
+                <div class="world-label">
+                  <span id="arrayLabel">4 × 4 MAC ARRAY</span
+                  ><small id="arraySub">OUTPUT STATIONARY</small>
+                </div>
+                <div
+                  id="fabric"
+                  class="fabric"
+                  aria-label="Interactive multiply-accumulate array"
+                ></div>
+                <div
+                  class="sprite world-bot architect-bot"
+                  aria-hidden="true"
+                ></div>
+                <div
+                  class="sprite world-bot verifier-bot"
+                  aria-hidden="true"
+                ></div>
+                <div
+                  class="sprite world-bot adversary-bot"
+                  aria-hidden="true"
+                ></div>
+                <div class="world-readout">
+                  <span id="worldStatus">READY TO EVALUATE</span
+                  ><small id="worldHint"
+                    >Select a processing element to inspect it</small
+                  >
+                </div>
+                <div class="world-corner" id="shapeLabel"></div>
+                <div class="attack-banner" id="attackBanner" hidden></div>
+              </div>
+              <div class="trace-controls">
+                <button
+                  id="play"
+                  class="icon-btn"
+                  aria-label="Play cycle trace"
+                  title="Play trace"
+                >
+                  ▶</button
+                ><button
+                  id="step"
+                  class="icon-btn"
+                  aria-label="Step one trace event"
+                  title="Step event"
+                >
+                  ↦</button
+                ><label for="timeline" class="sr-only"
+                  >Cycle trace position</label
+                ><input
+                  id="timeline"
+                  type="range"
+                  min="0"
+                  max="1"
+                  value="0"
+                /><span class="mono" id="tracePosition">CYCLE 0</span
+                ><button id="traceOpen" class="text-btn">
+                  Inspect trace ↗
+                </button>
+              </div>
+              <div class="trace-caption" id="traceCaption">
+                A cycle-stepped view of the first output tile. Memory stalls are
+                included.
+              </div>
+            </div>
+            <div class="metrics" id="metrics"></div>
+            <div
+              class="result-banner"
+              id="resultBanner"
+              hidden
+              role="status"
+            ></div>
+            <div class="card brief-card">
+              <div class="brief-heading">
+                <span class="eyebrow">THE DESIGN BRIEF</span
+                ><span class="pill" id="workloadPill"></span>
+              </div>
+              <h3 id="briefTitle"></h3>
+              <p id="briefText"></p>
+              <div class="targets" id="targets"></div>
+              <div class="brief-actions">
+                <button class="button outline" id="attack">
+                  Challenge this design <span>↗</span></button
+                ><button class="text-btn" id="clearAttack" hidden>
+                  Restore workload</button
+                ><span id="attackNote"
+                  >The adversary searches four stress cases.</span
+                >
+              </div>
+            </div>
+          </section>
+          <aside class="right-column">
+            <div class="card agent-card">
+              <div class="section-head">
+                <span class="eyebrow">03 / DESIGN PARTNER</span
+                ><span class="pill accent">TOOL-GROUNDED</span>
+              </div>
+              <div class="agent-intro">
+                <div
+                  class="sprite portrait architect-bot"
+                  aria-hidden="true"
+                ></div>
+                <div>
+                  <h2>Meet Pip.</h2>
+                  <p>A curious architect. A demanding verifier.</p>
+                </div>
+              </div>
+              <div id="agentLog" class="agent-log" aria-live="polite">
+                <div class="agent-message">
+                  <b>PIP / ARCHITECT</b>
+                  <p>
+                    Start with a design brief. I’ll explore the trade-offs; you
+                    decide what makes the cut.
+                  </p>
+                </div>
+              </div>
+              <div class="search-progress" id="searchProgress" hidden>
+                <div class="meter"><i></i></div>
+                <span></span>
+              </div>
+              <button class="button pale full" id="search">
+                Explore 36 candidates <span>✧</span>
+              </button>
+              <div id="proposal" class="proposal" hidden></div>
+              <p class="micro left">
+                Adaptive surrogate search · 1,296 legal designs<br />Every
+                proposal runs through the same evaluator.
+              </p>
+              <div class="agent-questions">
+                <button data-question="bottleneck">
+                  Explain the bottleneck</button
+                ><button data-question="precision">Why this precision?</button
+                ><button data-question="repair">Suggest a repair</button>
+              </div>
+              <div class="mentor-state" id="mentorState">
+                Local analysis ready · cloud mentor connecting
+              </div>
+            </div>
+            <div class="card inspector-card">
+              <div class="section-head">
+                <span class="eyebrow">UNDER THE SURFACE</span
+                ><span class="mono" id="selectedPE">PE 0,0</span>
+              </div>
+              <div class="equation" id="peEquation">a × b + accumulator</div>
+              <div class="inspector-details" id="inspectorDetails"></div>
+              <button class="text-btn" data-open="evidence">
+                Inspect hardware evidence ↗
+              </button>
+            </div>
+            <div class="save-row">
+              <button class="text-btn" id="export">↓ Export experiment</button
+              ><button class="text-btn" id="share">↗ Share design</button>
+            </div>
+            <p class="micro left">
+              Progress stays in this browser. Shared links include design
+              settings only.
+            </p>
+          </aside>
+        </div>
+        <section class="card frontier-card">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">DESIGN SPACE</span>
+              <h2>There is no single best chip.</h2>
+            </div>
+            <span class="micro" id="frontierCount"
+              >Run the architect to compare candidates.</span
+            >
+          </div>
+          <div class="frontier-layout">
+            <svg
+              id="frontier"
+              viewBox="0 0 760 230"
+              role="img"
+              aria-label="Design candidates: resource cost on horizontal axis, latency on vertical axis"
+            ></svg>
+            <div class="frontier-key">
+              <span><i class="key-dot current"></i> Your design</span
+              ><span><i class="key-dot"></i> Evaluated candidate</span
+              ><span><i class="key-dot pareto"></i> Pareto frontier</span>
+              <p>
+                Click a point to inspect a trade-off.<br />Lower and left is
+                better. Error remains a hard constraint.
+              </p>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section id="experiments" class="view">
+        <div class="page-heading">
+          <div class="eyebrow">CONTROLLED EXPERIMENTS</div>
+          <h1>Let the measurements argue.</h1>
+          <p>
+            Compare adaptive search, random sampling, and a fixed engineering
+            heuristic under the same evaluation budget.
+          </p>
+        </div>
+        <div class="card experiment-controls">
+          <label
+            >Design brief<select id="experimentMission">
+              <option value="0">The quiet camera</option>
+              <option value="1">A voice in the noise</option>
+              <option value="2">The long conversation</option>
+            </select></label
+          ><label
+            >Evaluation budget<select id="experimentBudget">
+              <option>18</option>
+              <option selected>36</option>
+              <option>60</option>
+            </select></label
+          ><label
+            >Seed<input
+              id="experimentSeed"
+              type="number"
+              min="1"
+              max="999999"
+              value="42" /></label
+          ><button class="button primary" id="runExperiment">
+            Run fair comparison ↗
+          </button>
+        </div>
+        <div id="experimentStatus" role="status" class="micro left"></div>
+        <div class="card chart-card">
+          <div class="section-head">
+            <span class="eyebrow">BEST OBSERVED OBJECTIVE ↓</span
+            ><span class="micro">Same start · same budget · same workload</span>
+          </div>
+          <svg
+            id="convergence"
+            viewBox="0 0 1000 290"
+            role="img"
+            aria-label="Search convergence chart"
+          ></svg>
+          <div class="chart-legend">
+            <span style="--key: #8ac9aa">Adaptive surrogate</span
+            ><span style="--key: #df9a73">Random sampling</span
+            ><span style="--key: #939dbc">Fixed heuristic</span>
+          </div>
+        </div>
+        <div id="experimentResults"></div>
+        <div class="card prose" id="publishedExperiments">
+          <h2>Reproducibility beats a lucky run.</h2>
+          <p>Loading the published multi-seed experiment…</p>
+        </div>
+      </section>
+      <section id="evidence" class="view">
+        <div class="page-heading">
+          <div class="eyebrow">SHOW YOUR WORK</div>
+          <h1>Pretty pixels. Inspectable proof.</h1>
+          <p>
+            Real hardware tools run remotely. Their results live here alongside
+            the exact scope, toolchain, and limitations.
+          </p>
+        </div>
+        <div id="evidenceContent">
+          <div class="card prose">Loading hardware evidence…</div>
+        </div>
+      </section>
+      <section id="guide" class="view">
+        <div class="page-heading">
+          <div class="eyebrow">THE FIELD GUIDE</div>
+          <h1>Understand the trade-off.</h1>
+          <p>
+            A short path from “what is a MAC?” to the assumptions behind this
+            experiment.
+          </p>
+        </div>
+        <div class="guide-grid">
+          <div class="card prose">
+            <div class="sprite portrait architect-bot" aria-hidden="true"></div>
+            <h2>Three minutes in the foundry</h2>
+            <ol>
+              <li>
+                <b>Choose a brief.</b> Each kernel has a latency, resource, and
+                numerical-error budget.
+              </li>
+              <li>
+                <b>Change the architecture.</b> Bigger arrays add parallelism,
+                but also cost more and need data faster.
+              </li>
+              <li>
+                <b>Run an evaluation.</b> Inspect a processing element and step
+                through the actual integer computation.
+              </li>
+              <li>
+                <b>Challenge the design.</b> The adversary picks the worst of
+                four defined workload perturbations.
+              </li>
+              <li>
+                <b>Ask for a proposal.</b> Compare the architect’s measured
+                candidate, apply it, and rerun.
+              </li>
+              <li>
+                <b>Open Evidence.</b> See the RTL, independent tests, synthesis,
+                physical-design results, and limitations.
+              </li>
+            </ol>
+            <button class="button pale" id="guideStart">
+              Start in the workbench ↗
+            </button>
+          </div>
+          <div class="card prose">
+            <h2>The engineering contract</h2>
+            <p>
+              <b>ECE:</b> a synthesizable signed streaming outer-product array,
+              optional product register, finite-width accumulation, synchronous
+              reset, and valid/ready flow control.
+            </p>
+            <p>
+              <b>Computer architecture:</b> host-scheduled tiles, scratchpad
+              cache model, transfer accounting, memory stalls, utilization, tile
+              reuse, and constrained design-space exploration.
+            </p>
+            <p>
+              <b>ML systems:</b> integer quantization against a floating-point
+              GEMM oracle, per-tensor versus per-output-channel weight scaling,
+              numerical outliers, and surrogate-guided search.
+            </p>
+            <p>
+              <b>Research:</b> independent differential tests, intentional
+              defect detection, bounded invariants, standard-cell synthesis,
+              physical-design evidence, matched-budget baselines, reproducible
+              seeds.
+            </p>
+          </div>
+        </div>
+        <div class="card prose">
+          <h2>A model with visible boundaries.</h2>
+          <div id="glossary"></div>
+        </div>
+        <div class="card prose">
+          <h2>Research that shaped the lab</h2>
+          <div class="sources">
+            <a
+              href="https://arxiv.org/abs/1911.09925"
+              target="_blank"
+              rel="noopener"
+              ><b>Gemmini ↗</b
+              ><span
+                >Full-stack accelerator evaluation; array results alone miss
+                system effects.</span
+              ></a
+            ><a
+              href="https://accelergy.mit.edu/timeloop.pdf"
+              target="_blank"
+              rel="noopener"
+              ><b>Timeloop ↗</b
+              ><span
+                >Make data movement and mapping assumptions explicit.</span
+              ></a
+            ><a
+              href="https://arxiv.org/abs/2211.10438"
+              target="_blank"
+              rel="noopener"
+              ><b>SmoothQuant ↗</b
+              ><span
+                >Outliers matter in quantization. This lab uses simpler
+                symmetric quantization, not SmoothQuant.</span
+              ></a
+            ><a
+              href="https://arxiv.org/abs/2601.01765"
+              target="_blank"
+              rel="noopener"
+              ><b>RTL-OPT ↗</b
+              ><span
+                >Correctness and real PPA evaluation must accompany RTL
+                optimization.</span
+              ></a
+            ><a
+              href="https://arxiv.org/abs/2604.14989"
+              target="_blank"
+              rel="noopener"
+              ><b>Dr. RTL ↗</b
+              ><span
+                >Tool-grounded optimization is established research. Our focus
+                is interactive adversarial co-design.</span
+              ></a
+            ><a
+              href="https://openroad-flow-scripts.readthedocs.io/en/latest/mainREADME.html"
+              target="_blank"
+              rel="noopener"
+              ><b>OpenROAD ↗</b
+              ><span
+                >Open RTL-to-layout tooling and reproducible physical-design
+                analysis.</span
+              ></a
+            >
+          </div>
+          <p class="muted">
+            This project makes no claim to outperform industrial EDA or to have
+            invented autonomous chip design. Its contribution is a coherent,
+            inspectable co-design environment under a small compute budget.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <span>SILICON / SIEGE <b>v1.0</b></span
+      ><span>Built to be questioned. Designed to be understood.</span
+      ><span>Browser model + real RTL evidence</span>
+    </footer>
+    <dialog id="detailDialog">
+      <div class="dialog-head">
+        <span class="eyebrow" id="dialogEyebrow">INSPECT</span
+        ><button class="icon-btn" id="closeDialog" aria-label="Close dialog">
+          ×
+        </button>
+      </div>
+      <div id="dialogBody"></div>
+    </dialog>
+    <div class="toast" id="toast" role="status" hidden></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

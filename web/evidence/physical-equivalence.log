@@ -1,0 +1,79 @@
+[2026-10-20 21:38:05.299] [miter_logger] [info] MiterStrategy::run starting
+[2026-10-20 21:38:05.299] [miter_logger] [info] Collecting POs for design 0: siege_tile
+
+[2026-10-20 21:38:05.341] [miter_logger] [info] Collected 1360 PIs for design 0
+
+[2026-10-20 21:38:05.341] [miter_logger] [info] Collected 1676 POs for design 0
+
+[2026-10-20 21:38:05.341] [miter_logger] [info] design 0 PI summary by model/term (1360 total terminals, 10 unique rows):
+| Model      | Term      | Count |
+|------------|-----------|-------|
+| DFF_X1     | Q         |   645 |
+| DFF_X1     | QN        |   645 |
+| siege_tile | a         |    32 |
+| siege_tile | b         |    32 |
+| siege_tile | clk       |     1 |
+| siege_tile | in_first  |     1 |
+| siege_tile | in_last   |     1 |
+| siege_tile | in_valid  |     1 |
+| siege_tile | out_ready |     1 |
+| siege_tile | reset     |     1 |
+
+[2026-10-20 21:38:05.341] [miter_logger] [info] design 0 PO summary by model/term (1676 total terminals, 5 unique rows):
+| Model      | Term      | Count |
+|------------|-----------|-------|
+| DFF_X1     | CK        |   645 |
+| DFF_X1     | D         |   645 |
+| siege_tile | out_data  |   384 |
+| siege_tile | in_ready  |     1 |
+| siege_tile | out_valid |     1 |
+
+[2026-10-20 21:38:05.341] [miter_logger] [info] Collecting POs for design 1: siege_tile
+
+[2026-10-20 21:38:05.369] [miter_logger] [info] size of common inputs: 1360
+[2026-10-20 21:38:05.369] [miter_logger] [info] size of diff0 inputs: 0
+[2026-10-20 21:38:05.369] [miter_logger] [info] size of diff1 inputs: 0
+[2026-10-20 21:38:05.369] [miter_logger] [info] Collected 1360 PIs for design 1
+
+[2026-10-20 21:38:05.369] [miter_logger] [info] Collected 1676 POs for design 1
+
+[2026-10-20 21:38:05.369] [miter_logger] [info] design 1 PI summary by model/term (1360 total terminals, 10 unique rows):
+| Model      | Term      | Count |
+|------------|-----------|-------|
+| DFF_X1     | Q         |   645 |
+| DFF_X1     | QN        |   645 |
+| siege_tile | a         |    32 |
+| siege_tile | b         |    32 |
+| siege_tile | clk       |     1 |
+| siege_tile | in_first  |     1 |
+| siege_tile | in_last   |     1 |
+| siege_tile | in_valid  |     1 |
+| siege_tile | out_ready |     1 |
+| siege_tile | reset     |     1 |
+
+[2026-10-20 21:38:05.369] [miter_logger] [info] design 1 PO summary by model/term (1676 total terminals, 5 unique rows):
+| Model      | Term      | Count |
+|------------|-----------|-------|
+| DFF_X1     | CK        |   645 |
+| DFF_X1     | D         |   645 |
+| siege_tile | out_data  |   384 |
+| siege_tile | in_ready  |     1 |
+| siege_tile | out_valid |     1 |
+
+[2026-10-20 21:38:05.369] [miter_logger] [info] normalizeInputs: starting
+[2026-10-20 21:38:05.371] [miter_logger] [info] size of common inputs: 1360
+[2026-10-20 21:38:05.371] [miter_logger] [info] size of diff0 inputs: 0
+[2026-10-20 21:38:05.371] [miter_logger] [info] size of diff1 inputs: 0
+[2026-10-20 21:38:05.371] [miter_logger] [info] normalizeOutputs: starting
+[2026-10-20 21:38:05.372] [miter_logger] [info] size of common outputs: 1676
+[2026-10-20 21:38:05.372] [miter_logger] [info] size of diff0 outputs: 0
+[2026-10-20 21:38:05.372] [miter_logger] [info] size of diff1 outputs: 0
+[2026-10-20 21:38:05.372] [miter_logger] [info] size of PIs in circuit 0: 1360
+[2026-10-20 21:38:05.372] [miter_logger] [info] size of PIs in circuit 1: 1360
+[2026-10-20 21:38:05.372] [miter_logger] [info] size of POs in circuit 0: 1676
+[2026-10-20 21:38:05.372] [miter_logger] [info] size of POs in circuit 1: 1676
+[2026-10-20 21:38:05.519] [miter_logger] [info] Building miter expression
+[2026-10-20 21:38:05.519] [miter_logger] [info] Finished building miter expression
+[2026-10-20 21:38:05.519] [miter_logger] [info] Starting solver
+[2026-10-20 21:38:05.519] [miter_logger] [info] SAT solver finished: UNSAT
+[2026-10-20 21:38:05.519] [miter_logger] [info] Circuits are IDENTICAL

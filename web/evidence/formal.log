@@ -1,0 +1,708 @@
+
+ /----------------------------------------------------------------------------\
+ |                                                                            |
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |                                                                            |
+ |  Copyright (C) 2012 - 2020  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |                                                                            |
+ |  Permission to use, copy, modify, and/or distribute this software for any  |
+ |  purpose with or without fee is hereby granted, provided that the above    |
+ |  copyright notice and this permission notice appear in all copies.         |
+ |                                                                            |
+ |  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  |
+ |  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          |
+ |  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   |
+ |  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    |
+ |  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     |
+ |  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   |
+ |  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            |
+ |                                                                            |
+ \----------------------------------------------------------------------------/
+
+ Yosys 0.33 (git sha1 2584903a060)
+
+
+-- Running command `read_verilog -formal rtl/siege_tile.v; chparam -set P 2 -set BITS 4 -set ACC 16 -set PIPE 1 siege_tile; prep -top siege_tile -flatten; memory_map; opt; sat -seq 20 -prove-asserts -set-assumes -verify' --
+
+1. Executing Verilog-2005 frontend: rtl/siege_tile.v
+Parsing formal Verilog input from `rtl/siege_tile.v' to AST representation.
+Generating RTLIL representation for module `\siege_tile'.
+Warning: Replacing memory \pipelined.prod with list of registers. See rtl/siege_tile.v:45
+Warning: Replacing memory \accum with list of registers. See rtl/siege_tile.v:67
+Successfully finished Verilog frontend.
+Parameter \P = 2
+Parameter \BITS = 4
+Parameter \ACC = 16
+Parameter \PIPE = 1
+
+2. Executing AST frontend in derive mode using pre-parsed AST for module `\siege_tile'.
+Parameter \P = 2
+Parameter \BITS = 4
+Parameter \ACC = 16
+Parameter \PIPE = 1
+Generating RTLIL representation for module `$paramod$22f90f51b28e70b0e0527d69c53254d6045dd2f1\siege_tile'.
+Warning: Replacing memory \pipelined.prod with list of registers. See rtl/siege_tile.v:45
+Warning: Replacing memory \accum with list of registers. See rtl/siege_tile.v:67
+
+3. Executing PREP pass.
+
+3.1. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1.1. Analyzing design hierarchy..
+Top module:  \siege_tile
+
+3.1.2. Analyzing design hierarchy..
+Top module:  \siege_tile
+Removed 0 unused modules.
+Module siege_tile directly or indirectly contains formal properties -> setting "keep" attribute.
+
+3.2. Executing PROC pass (convert processes to netlists).
+
+3.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+3.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 2 switch rules as full_case in process $proc$rtl/siege_tile.v:64$136 in module siege_tile.
+Marked 2 switch rules as full_case in process $proc$rtl/siege_tile.v:39$179 in module siege_tile.
+Removed a total of 0 dead cases.
+
+3.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 1 redundant assignment.
+Promoted 22 assignments to connections.
+
+3.2.4. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `\siege_tile.$proc$rtl/siege_tile.v:80$191'.
+  Set init value: \past_valid = 1'0
+Found init rule in `\siege_tile.$proc$rtl/siege_tile.v:0$192'.
+  Set init value: $formal$rtl/siege_tile.v:83$126_EN = 1'0
+Found init rule in `\siege_tile.$proc$rtl/siege_tile.v:0$194'.
+  Set init value: $formal$rtl/siege_tile.v:85$127_EN = 1'0
+Found init rule in `\siege_tile.$proc$rtl/siege_tile.v:0$196'.
+  Set init value: $formal$rtl/siege_tile.v:86$128_EN = 1'0
+Found init rule in `\siege_tile.$proc$rtl/siege_tile.v:0$198'.
+  Set init value: $formal$rtl/siege_tile.v:89$129_EN = 1'0
+Found init rule in `\siege_tile.$proc$rtl/siege_tile.v:0$200'.
+  Set init value: $formal$rtl/siege_tile.v:91$130_EN = 1'0
+Found init rule in `\siege_tile.$proc$rtl/siege_tile.v:0$202'.
+  Set init value: $formal$rtl/siege_tile.v:92$131_EN = 1'0
+
+3.2.5. Executing PROC_ARST pass (detect async resets in processes).
+
+3.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~13 debug messages>
+
+3.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+     1/8: $2\i[31:0]
+     2/8: $1\i[31:0]
+     3/8: $0\accum[3][15:0]
+     4/8: $0\accum[2][15:0]
+     5/8: $0\accum[1][15:0]
+     6/8: $0\accum[0][15:0]
+     7/8: $0\closing[0:0]
+     8/8: $0\out_valid[0:0]
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+     1/12: $0$formal$rtl/siege_tile.v:83$126_EN[0:0]$156
+     2/12: $0$formal$rtl/siege_tile.v:83$126_CHECK[0:0]$155
+     3/12: $0$formal$rtl/siege_tile.v:85$127_EN[0:0]$158
+     4/12: $0$formal$rtl/siege_tile.v:85$127_CHECK[0:0]$157
+     5/12: $0$formal$rtl/siege_tile.v:86$128_EN[0:0]$160
+     6/12: $0$formal$rtl/siege_tile.v:86$128_CHECK[0:0]$159
+     7/12: $0$formal$rtl/siege_tile.v:89$129_EN[0:0]$162
+     8/12: $0$formal$rtl/siege_tile.v:89$129_CHECK[0:0]$161
+     9/12: $0$formal$rtl/siege_tile.v:91$130_EN[0:0]$164
+    10/12: $0$formal$rtl/siege_tile.v:91$130_CHECK[0:0]$163
+    11/12: $0$formal$rtl/siege_tile.v:92$131_EN[0:0]$166
+    12/12: $0$formal$rtl/siege_tile.v:92$131_CHECK[0:0]$165
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+     1/9: $2\pipelined.x[31:0]
+     2/9: $0\pipelined.pv[0:0]
+     3/9: $1\pipelined.x[31:0]
+     4/9: $0\pipelined.prod[3][7:0]
+     5/9: $0\pipelined.prod[2][7:0]
+     6/9: $0\pipelined.prod[1][7:0]
+     7/9: $0\pipelined.prod[0][7:0]
+     8/9: $0\pipelined.pl[0:0]
+     9/9: $0\pipelined.pf[0:0]
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:80$191'.
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:0$192'.
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:0$194'.
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:0$196'.
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:0$198'.
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:0$200'.
+Creating decoders for process `\siege_tile.$proc$rtl/siege_tile.v:0$202'.
+
+3.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `\siege_tile.\product[0]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+No latch inferred for signal `\siege_tile.\product[1]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+No latch inferred for signal `\siege_tile.\product[2]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+No latch inferred for signal `\siege_tile.\product[3]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+No latch inferred for signal `\siege_tile.\value[0]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+No latch inferred for signal `\siege_tile.\value[1]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+No latch inferred for signal `\siege_tile.\value[2]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+No latch inferred for signal `\siege_tile.\value[3]' from process `\siege_tile.$proc$rtl/siege_tile.v:0$180'.
+
+3.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\siege_tile.\out_valid' using process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+  created $dff cell `$procdff$340' with positive edge clock.
+Creating register for signal `\siege_tile.\closing' using process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+  created $dff cell `$procdff$341' with positive edge clock.
+Creating register for signal `\siege_tile.\i' using process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+  created $dff cell `$procdff$342' with positive edge clock.
+Creating register for signal `\siege_tile.\accum[0]' using process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+  created $dff cell `$procdff$343' with positive edge clock.
+Creating register for signal `\siege_tile.\accum[1]' using process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+  created $dff cell `$procdff$344' with positive edge clock.
+Creating register for signal `\siege_tile.\accum[2]' using process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+  created $dff cell `$procdff$345' with positive edge clock.
+Creating register for signal `\siege_tile.\accum[3]' using process `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+  created $dff cell `$procdff$346' with positive edge clock.
+Creating register for signal `\siege_tile.\past_valid' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$347' with positive edge clock.
+Creating register for signal `\siege_tile.$past$rtl/siege_tile.v:84$122$0' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$348' with positive edge clock.
+Creating register for signal `\siege_tile.$past$rtl/siege_tile.v:85$123$0' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$349' with positive edge clock.
+Creating register for signal `\siege_tile.$past$rtl/siege_tile.v:87$124$0' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$350' with positive edge clock.
+Creating register for signal `\siege_tile.$past$rtl/siege_tile.v:91$125$0' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$351' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:83$126_CHECK' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$352' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:83$126_EN' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$353' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:85$127_CHECK' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$354' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:85$127_EN' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$355' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:86$128_CHECK' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$356' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:86$128_EN' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$357' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:89$129_CHECK' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$358' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:89$129_EN' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$359' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:91$130_CHECK' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$360' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:91$130_EN' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$361' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:92$131_CHECK' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$362' with positive edge clock.
+Creating register for signal `\siege_tile.$formal$rtl/siege_tile.v:92$131_EN' using process `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+  created $dff cell `$procdff$363' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.pv' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$364' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.pf' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$365' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.pl' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$366' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.x' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$367' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.prod[0]' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$368' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.prod[1]' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$369' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.prod[2]' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$370' with positive edge clock.
+Creating register for signal `\siege_tile.\pipelined.prod[3]' using process `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+  created $dff cell `$procdff$371' with positive edge clock.
+
+3.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+3.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 6 empty switches in `\siege_tile.$proc$rtl/siege_tile.v:64$136'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:64$136'.
+Found and cleaned up 5 empty switches in `\siege_tile.$proc$rtl/siege_tile.v:81$150'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:81$150'.
+Found and cleaned up 2 empty switches in `\siege_tile.$proc$rtl/siege_tile.v:39$179'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:39$179'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:0$180'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:80$191'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:0$192'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:0$194'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:0$196'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:0$198'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:0$200'.
+Removing empty process `siege_tile.$proc$rtl/siege_tile.v:0$202'.
+Cleaned up 13 empty switches.
+
+3.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+<suppressed ~6 debug messages>
+
+3.3. Executing FLATTEN pass (flatten design).
+
+3.4. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+3.5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+Removed 10 unused cells and 123 unused wires.
+<suppressed ~13 debug messages>
+
+3.6. Executing CHECK pass (checking for obvious problems).
+Checking module siege_tile...
+Found and reported 0 problems.
+
+3.7. Executing OPT pass (performing simple optimizations).
+
+3.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+3.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+3.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~30 debug messages>
+
+3.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \siege_tile.
+Performed a total of 0 changes.
+
+3.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+<suppressed ~15 debug messages>
+Removed a total of 5 cells.
+
+3.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+Removed 0 unused cells and 6 unused wires.
+<suppressed ~1 debug messages>
+
+3.7.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+3.7.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+3.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~28 debug messages>
+
+3.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \siege_tile.
+Performed a total of 0 changes.
+
+3.7.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+Removed a total of 0 cells.
+
+3.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+
+3.7.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+3.7.14. Finished OPT passes. (There is nothing left to do.)
+
+3.8. Executing WREDUCE pass (reducing word size of cells).
+Removed top 4 bits (of 8) from port A of cell siege_tile.$mul$rtl/siege_tile.v:30$181 ($mul).
+Removed top 4 bits (of 8) from port B of cell siege_tile.$mul$rtl/siege_tile.v:30$181 ($mul).
+Removed top 4 bits (of 8) from port A of cell siege_tile.$mul$rtl/siege_tile.v:30$182 ($mul).
+Removed top 4 bits (of 8) from port B of cell siege_tile.$mul$rtl/siege_tile.v:30$182 ($mul).
+Removed top 4 bits (of 8) from port A of cell siege_tile.$mul$rtl/siege_tile.v:30$183 ($mul).
+Removed top 4 bits (of 8) from port B of cell siege_tile.$mul$rtl/siege_tile.v:30$183 ($mul).
+Removed top 4 bits (of 8) from port A of cell siege_tile.$mul$rtl/siege_tile.v:30$184 ($mul).
+Removed top 4 bits (of 8) from port B of cell siege_tile.$mul$rtl/siege_tile.v:30$184 ($mul).
+
+3.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+
+3.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+3.11. Executing OPT pass (performing simple optimizations).
+
+3.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+3.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+Removed a total of 0 cells.
+
+3.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+
+3.11.4. Finished fast OPT passes.
+
+3.12. Printing statistics.
+
+=== siege_tile ===
+
+   Number of wires:                115
+   Number of wire bits:            695
+   Number of public wires:          36
+   Number of public wire bits:     257
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                105
+     $add                            4
+     $assert                         5
+     $assume                         1
+     $dff                           28
+     $eq                             1
+     $logic_and                      8
+     $logic_not                      7
+     $mul                            4
+     $mux                           47
+
+3.13. Executing CHECK pass (checking for obvious problems).
+Checking module siege_tile...
+Found and reported 0 problems.
+
+4. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+
+5. Executing OPT pass (performing simple optimizations).
+
+5.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+5.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+5.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~28 debug messages>
+
+5.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \siege_tile.
+Performed a total of 0 changes.
+
+5.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+Removed a total of 0 cells.
+
+5.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $procdff$371 ($dff) from module siege_tile (D = \product[3], Q = \pipelined.prod[3]).
+Adding EN signal on $procdff$370 ($dff) from module siege_tile (D = \product[2], Q = \pipelined.prod[2]).
+Adding EN signal on $procdff$369 ($dff) from module siege_tile (D = \product[1], Q = \pipelined.prod[1]).
+Adding EN signal on $procdff$368 ($dff) from module siege_tile (D = \product[0], Q = \pipelined.prod[0]).
+Adding SRST signal on $procdff$366 ($dff) from module siege_tile (D = $procmux$329_Y, Q = \pipelined.pl, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$392 ($sdff) from module siege_tile (D = \in_last, Q = \pipelined.pl).
+Adding SRST signal on $procdff$365 ($dff) from module siege_tile (D = $procmux$335_Y, Q = \pipelined.pf, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$394 ($sdff) from module siege_tile (D = \in_first, Q = \pipelined.pf).
+Adding SRST signal on $procdff$364 ($dff) from module siege_tile (D = \accepted, Q = \pipelined.pv, rval = 1'0).
+Adding SRST signal on $procdff$359 ($dff) from module siege_tile (D = $procmux$276_Y, Q = $formal$rtl/siege_tile.v:89$129_EN, rval = 1'0).
+Adding SRST signal on $procdff$355 ($dff) from module siege_tile (D = $procmux$260_Y, Q = $formal$rtl/siege_tile.v:85$127_EN, rval = 1'0).
+Adding SRST signal on $procdff$346 ($dff) from module siege_tile (D = $procmux$214_Y, Q = \accum[3], rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$399 ($sdff) from module siege_tile (D = $add$rtl/siege_tile.v:73$146_Y, Q = \accum[3]).
+Adding SRST signal on $procdff$345 ($dff) from module siege_tile (D = $procmux$220_Y, Q = \accum[2], rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$401 ($sdff) from module siege_tile (D = $add$rtl/siege_tile.v:73$144_Y, Q = \accum[2]).
+Adding SRST signal on $procdff$344 ($dff) from module siege_tile (D = $procmux$226_Y, Q = \accum[1], rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$403 ($sdff) from module siege_tile (D = $add$rtl/siege_tile.v:73$142_Y, Q = \accum[1]).
+Adding SRST signal on $procdff$343 ($dff) from module siege_tile (D = $procmux$232_Y, Q = \accum[0], rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:266:slice$405 ($sdff) from module siege_tile (D = $add$rtl/siege_tile.v:73$140_Y, Q = \accum[0]).
+Adding SRST signal on $procdff$341 ($dff) from module siege_tile (D = $procmux$239_Y, Q = \closing, rval = 1'0).
+Adding EN signal on $auto$ff.cc:266:slice$407 ($sdff) from module siege_tile (D = $procmux$239_Y, Q = \closing).
+Adding SRST signal on $procdff$340 ($dff) from module siege_tile (D = $procmux$249_Y, Q = \out_valid, rval = 1'0).
+
+5.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+Removed 25 unused cells and 26 unused wires.
+<suppressed ~26 debug messages>
+
+5.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+<suppressed ~1 debug messages>
+
+5.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~17 debug messages>
+
+5.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \siege_tile.
+Performed a total of 0 changes.
+
+5.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+<suppressed ~18 debug messages>
+Removed a total of 6 cells.
+
+5.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+Removed 0 unused cells and 6 unused wires.
+<suppressed ~1 debug messages>
+
+5.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+5.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \siege_tile..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~17 debug messages>
+
+5.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \siege_tile.
+Performed a total of 0 changes.
+
+5.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\siege_tile'.
+Removed a total of 0 cells.
+
+5.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \siege_tile..
+
+5.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module siege_tile.
+
+5.23. Finished OPT passes. (There is nothing left to do.)
+
+6. Executing SAT pass (solving SAT problems in the circuit).
+
+Setting up time step 1:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import set-constraint from init attribute: $formal$rtl/siege_tile.v:83$126_EN = 1'0
+Import set-constraint from init attribute: $formal$rtl/siege_tile.v:85$127_EN = 1'0
+Import set-constraint from init attribute: $formal$rtl/siege_tile.v:89$129_EN = 1'0
+Import set-constraint from init attribute: $formal$rtl/siege_tile.v:91$130_EN = 1'0
+Import set-constraint from init attribute: \past_valid = 1'0
+Final init constraint equation: { \past_valid $formal$rtl/siege_tile.v:91$130_EN $formal$rtl/siege_tile.v:89$129_EN $formal$rtl/siege_tile.v:85$127_EN $formal$rtl/siege_tile.v:83$126_EN } = 5'00000
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 2:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 3:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 4:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 5:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 6:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 7:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 8:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 9:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 10:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 11:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 12:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 13:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 14:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 15:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 16:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 17:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 18:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 19:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Setting up time step 20:
+Final constraint equation: { } = { }
+Imported 82 cells to SAT database.
+Import constraint from assume cell: $formal$rtl/siege_tile.v:83$126_CHECK when $formal$rtl/siege_tile.v:83$126_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:85$127_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:86$128_CHECK when $formal$rtl/siege_tile.v:85$127_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:89$129_CHECK when $formal$rtl/siege_tile.v:89$129_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:91$130_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+Import proof for assert: $formal$rtl/siege_tile.v:92$131_CHECK when $formal$rtl/siege_tile.v:91$130_EN.
+
+Solving problem with 102178 variables and 292699 clauses..
+SAT proof finished - no model found: SUCCESS!
+
+                  /$$$$$$      /$$$$$$$$     /$$$$$$$    
+                 /$$__  $$    | $$_____/    | $$__  $$   
+                | $$  \ $$    | $$          | $$  \ $$   
+                | $$  | $$    | $$$$$       | $$  | $$   
+                | $$  | $$    | $$__/       | $$  | $$   
+                | $$/$$ $$    | $$          | $$  | $$   
+                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$
+                 \____ $$$|__/|________/|__/|_______/|__/
+                       \__/                              
+
+Warnings: 2 unique messages, 4 total
+End of script. Logfile hash: 57dbfd61af, CPU: user 0.92s system 0.06s, MEM: 98.21 MB peak
+Yosys 0.33 (git sha1 2584903a060)
+Time spent: 92% 1x sat (0 sec), 1% 10x opt_expr (0 sec), ...

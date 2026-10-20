@@ -1,0 +1,9 @@
+"""Import exact OpenROAD artifact metrics. Pass artifact directory and run URL."""
+import json,pathlib,sys,hashlib,shutil
+p=pathlib.Path(sys.argv[1]);out=pathlib.Path('web/evidence');out.mkdir(exist_ok=True)
+metrics=json.loads((p/'logs/base/6_report.json').read_text())
+drc=(p/'reports/base/5_route_drc.rpt').read_text()
+data={'schema':1,'summary':'The representative streaming tile completed synthesis, placement, clock-tree synthesis, detailed routing and GDS generation. Metrics below come from the final OpenROAD report.','run_url':sys.argv[2],'source_commit':(p/'commit.txt').read_text().strip(),'image_digest':(p/'image-digest.txt').read_text().strip(),'configuration':{'p':4,'bits':8,'acc':24,'pipe':1},'area_um2':metrics['finish__design__instance__area__stdcell'],'worst_setup_slack_ns':metrics['finish__timing__setup__ws'],'wns_ns':min(0,metrics['finish__timing__setup__ws']),'hold_slack_ns':metrics['finish__timing__hold__ws'],'drc':0 if not drc.strip() else None,'max_cap_violations':metrics['finish__timing__drv__max_cap'],'setup_violations':metrics['finish__timing__drv__setup_violation_count'],'hold_violations':metrics['finish__timing__drv__hold_violation_count'],'gds_sha256':hashlib.sha256((p/'6_final.gds').read_bytes()).hexdigest(),'metrics':metrics,'scope':'Academic Nangate45 typical, no foundry signoff, fabricated silicon or activity-annotated power claim. Host and SRAM excluded.'}
+(out/'physical.json').write_text(json.dumps(data,indent=2))
+shutil.copy(p/'6_final.gds',out/'siege_tile.gds');shutil.copy(p/'reports/base/6_finish.rpt',out/'physical-report.txt');shutil.copy(p/'reports/base/final_all.webp',out/'physical-layout.webp');shutil.copy(p/'logs/base/6_final_lec_check.log',out/'physical-equivalence.log')
+print(json.dumps({k:v for k,v in data.items() if k!='metrics'},indent=2))

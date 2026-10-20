@@ -25,6 +25,8 @@ jobs:
           docker cp siege-physical:/OpenROAD-flow-scripts/flow/logs/nangate45/siege_tile build/physical/logs || true
           docker cp siege-physical:/OpenROAD-flow-scripts/flow/results/nangate45/siege_tile/base/6_final.gds build/physical/6_final.gds || true
           docker cp siege-physical:/OpenROAD-flow-scripts/flow/results/nangate45/siege_tile/base/6_final.v build/physical/6_final.v || true
+      - name: Enforce physical timing and electrical limits
+        run: python3 scripts/check-physical.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

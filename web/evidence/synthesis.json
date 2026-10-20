@@ -1,0 +1,334 @@
+{
+  "schema": 1,
+  "scope": "Streaming GEMM tile only. Excludes host, SRAM macros, IO pads, clock tree and routing.",
+  "technology": "Nangate45 typical standard-cell library, 1.1 V / 25 C",
+  "tool": "Yosys 0.33 (git sha1 2584903a060)",
+  "library_sha256": "8d540a4d4cf6d09d27c87ad067857a9c0c2eeb023ab7a56e058cd3113db4e9b1",
+  "rtl_sha256": "c095c26e3acb26acd4a6885e4bb8bd8c58879e034823ced40d407483ebd0b132",
+  "candidates": [
+    {
+      "p": 2,
+      "bits": 4,
+      "acc": 16,
+      "pipe": 0,
+      "area_um2": 1199.394,
+      "cells": 905,
+      "netlist_sha256": "3119d15d8fedd53dc44a05e4c1d69919a712c0f45281960f2a6f1f09677d0385"
+    },
+    {
+      "p": 2,
+      "bits": 4,
+      "acc": 16,
+      "pipe": 1,
+      "area_um2": 1384.264,
+      "cells": 957,
+      "netlist_sha256": "31803f965c2bf6aa62f389684bf14db28fe429a538f825089b0ee758b9ced857"
+    },
+    {
+      "p": 2,
+      "bits": 4,
+      "acc": 24,
+      "pipe": 0,
+      "area_um2": 1698.41,
+      "cells": 1270,
+      "netlist_sha256": "8d25c9ae4ddf4ff0b1298a856ab5947a7fd2720622c5c7b84eb323e83ce4fc3d"
+    },
+    {
+      "p": 2,
+      "bits": 4,
+      "acc": 24,
+      "pipe": 1,
+      "area_um2": 1815.184,
+      "cells": 1262,
+      "netlist_sha256": "a93ffb9902983d262f27459fe7ab2f7c72a08ec9d6e12ce568d206ed03c6af89"
+    },
+    {
+      "p": 2,
+      "bits": 4,
+      "acc": 32,
+      "pipe": 0,
+      "area_um2": 2196.894,
+      "cells": 1634,
+      "netlist_sha256": "d648d075f2e33e9c92db61ecfdafc0f0e553f1fc1eb770bb5f08770af613e523"
+    },
+    {
+      "p": 2,
+      "bits": 4,
+      "acc": 32,
+      "pipe": 1,
+      "area_um2": 2363.676,
+      "cells": 1689,
+      "netlist_sha256": "6adc3311f70b17527ce8a3bb905ba69ae2884c517c3bc40b58d824edb17fa0c6"
+    },
+    {
+      "p": 2,
+      "bits": 8,
+      "acc": 16,
+      "pipe": 0,
+      "area_um2": 3027.878,
+      "cells": 2476,
+      "netlist_sha256": "8bbc86aa2c5060b25db97eb0824f86f66b5e05bf1681992058020a6137d4c122"
+    },
+    {
+      "p": 2,
+      "bits": 8,
+      "acc": 16,
+      "pipe": 1,
+      "area_um2": 3110.338,
+      "cells": 2426,
+      "netlist_sha256": "4bc90b569aebcb8160c2c045f36276734941d85fbcef7561a0ae209ef3f88efa"
+    },
+    {
+      "p": 2,
+      "bits": 8,
+      "acc": 24,
+      "pipe": 0,
+      "area_um2": 3143.056,
+      "cells": 2519,
+      "netlist_sha256": "5cee346a68de4f0dd4506548745d9742b1120f61609f665cd8293e09dcdba891"
+    },
+    {
+      "p": 2,
+      "bits": 8,
+      "acc": 24,
+      "pipe": 1,
+      "area_um2": 3538.864,
+      "cells": 2747,
+      "netlist_sha256": "23468753983395878afce8628ece12090ffd091a91e53fee5c3fa3881e1c5789"
+    },
+    {
+      "p": 2,
+      "bits": 8,
+      "acc": 32,
+      "pipe": 0,
+      "area_um2": 3583.818,
+      "cells": 2841,
+      "netlist_sha256": "229c1f2291c2f4fb42bd82ffbc1439d93300d1cdf57f1401085aca309217b621"
+    },
+    {
+      "p": 2,
+      "bits": 8,
+      "acc": 32,
+      "pipe": 1,
+      "area_um2": 3900.092,
+      "cells": 2987,
+      "netlist_sha256": "9cf6cd5add6215f6b0cc7c1be5ebf67fbcfda3b9cc0637bccef0be1fd797b063"
+    },
+    {
+      "p": 4,
+      "bits": 4,
+      "acc": 16,
+      "pipe": 0,
+      "area_um2": 4737.194,
+      "cells": 3566,
+      "netlist_sha256": "95c70775418eebfd6908bc27d788766735086b34ce01d568d810dfc53962786b"
+    },
+    {
+      "p": 4,
+      "bits": 4,
+      "acc": 16,
+      "pipe": 1,
+      "area_um2": 5428.528,
+      "cells": 3763,
+      "netlist_sha256": "9e174cfbcaf1c43a5e7bc1a05ed96966e682ba14b05f51fdc0b68c45bbcd4da1"
+    },
+    {
+      "p": 4,
+      "bits": 4,
+      "acc": 24,
+      "pipe": 0,
+      "area_um2": 6703.732,
+      "cells": 4973,
+      "netlist_sha256": "38df08429241491abe6fea0f9c0a58f4ff0a1a388aababa6efe55c3df4ae86c1"
+    },
+    {
+      "p": 4,
+      "bits": 4,
+      "acc": 24,
+      "pipe": 1,
+      "area_um2": 7183.33,
+      "cells": 5058,
+      "netlist_sha256": "d35dd2c7cdf497815cfdfb80b63af513adb95d312ae659f04c94b53e4cd324f1"
+    },
+    {
+      "p": 4,
+      "bits": 4,
+      "acc": 32,
+      "pipe": 0,
+      "area_um2": 8711.766,
+      "cells": 6469,
+      "netlist_sha256": "175ec731bfa5f3e3f347f4b1b7e4d16c8cb2c61c9290ed841b834cb002ab8fea"
+    },
+    {
+      "p": 4,
+      "bits": 4,
+      "acc": 32,
+      "pipe": 1,
+      "area_um2": 9415.602,
+      "cells": 6781,
+      "netlist_sha256": "f239512e2e4695beffe55f15d3e723b22870bb3105566f92e810014ae6d173aa"
+    },
+    {
+      "p": 4,
+      "bits": 8,
+      "acc": 16,
+      "pipe": 0,
+      "area_um2": 12072.942,
+      "cells": 9854,
+      "netlist_sha256": "692f6dc3c359e2e2dbb2cdf092e18a42c0b428fc3f722f93728f25bb7475f6d6"
+    },
+    {
+      "p": 4,
+      "bits": 8,
+      "acc": 16,
+      "pipe": 1,
+      "area_um2": 12329.632,
+      "cells": 9612,
+      "netlist_sha256": "fb2f5d63f1800074079bcbe1e256d4023f6f128b9aa2082cb3e5d667dc9c7710"
+    },
+    {
+      "p": 4,
+      "bits": 8,
+      "acc": 24,
+      "pipe": 0,
+      "area_um2": 12481.518,
+      "cells": 10034,
+      "netlist_sha256": "e4db8391afda9c1e055134955775daf09c9b0c3e01baa2a9cab31079d8c5e89a"
+    },
+    {
+      "p": 4,
+      "bits": 8,
+      "acc": 24,
+      "pipe": 1,
+      "area_um2": 14099.862,
+      "cells": 10983,
+      "netlist_sha256": "802097af230ced3c8e0c28b65310a3d054ca1a08e9bb509f51a03f819b8976bd"
+    },
+    {
+      "p": 4,
+      "bits": 8,
+      "acc": 32,
+      "pipe": 0,
+      "area_um2": 14275.954,
+      "cells": 11393,
+      "netlist_sha256": "03e3ffdfcf24a4e4c85fe86f7697a128026ea5462fdeeee410056eeeb33ed8df"
+    },
+    {
+      "p": 4,
+      "bits": 8,
+      "acc": 32,
+      "pipe": 1,
+      "area_um2": 15493.968,
+      "cells": 11876,
+      "netlist_sha256": "da97a7fa8b2f50eef22b4eab7e7a7ced49cbb14ee9d9010a3dc224ac6c19e143"
+    },
+    {
+      "p": 8,
+      "bits": 4,
+      "acc": 16,
+      "pipe": 0,
+      "area_um2": 18749.542,
+      "cells": 13992,
+      "netlist_sha256": "a2d1bf37add52d8bc69d044716181de37d6e1972551d395fe3acb55097dd0fac"
+    },
+    {
+      "p": 8,
+      "bits": 4,
+      "acc": 16,
+      "pipe": 1,
+      "area_um2": 21592.018,
+      "cells": 14951,
+      "netlist_sha256": "9b6b0c70fd64f4179941c74f7d419afc28d91dc9d3dcdaef3afa2b2605bb5330"
+    },
+    {
+      "p": 8,
+      "bits": 4,
+      "acc": 24,
+      "pipe": 0,
+      "area_um2": 25960.802,
+      "cells": 19121,
+      "netlist_sha256": "736ead6fc9918eb17cec27a958b7b1742e9c0049c9571a26c6b9bb0b8a0bbac5"
+    },
+    {
+      "p": 8,
+      "bits": 4,
+      "acc": 24,
+      "pipe": 1,
+      "area_um2": 28533.554,
+      "cells": 20089,
+      "netlist_sha256": "de81111e31723c0e1e9fb035f69f8c849fffbcbec9d7489cbf274c87adfbaa62"
+    },
+    {
+      "p": 8,
+      "bits": 4,
+      "acc": 32,
+      "pipe": 0,
+      "area_um2": 33232.444,
+      "cells": 24461,
+      "netlist_sha256": "5f4df32ac367304c776bbaf70aa7b17323ec0dd7a26e25a97e1a0643d3a40c18"
+    },
+    {
+      "p": 8,
+      "bits": 4,
+      "acc": 32,
+      "pipe": 1,
+      "area_um2": 37490.572,
+      "cells": 26956,
+      "netlist_sha256": "e85dae1b33c7df996bdf144b8959ed386e8715eefc164183c6fafc45954895d2"
+    },
+    {
+      "p": 8,
+      "bits": 8,
+      "acc": 16,
+      "pipe": 0,
+      "area_um2": 47878.404,
+      "cells": 39026,
+      "netlist_sha256": "58126cd24d8238bebeebe18a7d8b229582007b3ae86e2283c9ca48c7f77c5000"
+    },
+    {
+      "p": 8,
+      "bits": 8,
+      "acc": 16,
+      "pipe": 1,
+      "area_um2": 49145.628,
+      "cells": 38284,
+      "netlist_sha256": "61d385098506a658b658dca747504d46ee35e98dd75eaa50e59f45180bbfcb71"
+    },
+    {
+      "p": 8,
+      "bits": 8,
+      "acc": 24,
+      "pipe": 0,
+      "area_um2": 49810.894,
+      "cells": 39975,
+      "netlist_sha256": "89cfc325bb115224cf7d5be7d97799db1bdad075b08d9d27f796e6e23aaf4d48"
+    },
+    {
+      "p": 8,
+      "bits": 8,
+      "acc": 24,
+      "pipe": 1,
+      "area_um2": 56093.548,
+      "cells": 43568,
+      "netlist_sha256": "bde24a80533971abd7aca710ad4ed5c9180966b55292b583783aac76a5a86176"
+    },
+    {
+      "p": 8,
+      "bits": 8,
+      "acc": 32,
+      "pipe": 0,
+      "area_um2": 57037.05,
+      "cells": 45320,
+      "netlist_sha256": "f1cc28a06e3d53f737d8b806334dea0fd23d9c64578a573bb950f1bdb16ad7e6"
+    },
+    {
+      "p": 8,
+      "bits": 8,
+      "acc": 32,
+      "pipe": 1,
+      "area_um2": 61617.836,
+      "cells": 47110,
+      "netlist_sha256": "7c29f747c3a98fb8a75905b6b76403aedd45cf7870bdb015cbae9a30d60e85f2"
+    }
+  ]
+}
