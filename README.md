@@ -6,7 +6,7 @@ An interactive, adversarial accelerator-design lab bridging digital ECE, compute
 
 ![Live Silicon Siege workbench](docs/screenshots/workbench.jpg)
 
-[Original release validation](docs/VALIDATION.md)
+[Release validation](docs/VALIDATION.md)
 
 ## System lab: from trained model to accelerator RTL
 
