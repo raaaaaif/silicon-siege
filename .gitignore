@@ -1,0 +1,9 @@
+original/
+work/
+node_modules/
+.wrangler/
+.DS_Store
+build/
+*.zip
+*.vcd
+__pycache__/

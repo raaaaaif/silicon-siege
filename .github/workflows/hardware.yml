@@ -1,0 +1,42 @@
+name: Hardware evidence
+on:
+  workflow_dispatch:
+  push:
+    paths: ['rtl/**', 'scripts/verify_rtl.py', 'scripts/synth.py', '.github/workflows/hardware.yml']
+permissions:
+  contents: read
+jobs:
+  verify-and-synthesize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install remote tools
+        run: sudo apt-get update -qq && sudo apt-get install -y iverilog yosys
+      - name: Differential cycle verification and mutation testing
+        run: python3 scripts/verify_rtl.py
+      - name: Prove reset and stalled-result invariants (bounded, 20 cycles)
+        run: |
+          yosys -p 'read_verilog -formal rtl/siege_tile.v; chparam -set P 2 -set BITS 4 -set ACC 16 -set PIPE 1 siege_tile; prep -top siege_tile -flatten; memory_map; opt; sat -seq 20 -prove-asserts -set-assumes -verify' > build/formal.log
+      - name: Fetch Nangate45 library from OpenROAD
+        run: |
+          curl -fL --retry 3 https://raw.githubusercontent.com/The-OpenROAD-Project/OpenROAD-flow-scripts/master/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib -o build/NangateOpenCellLibrary_typical.lib
+          sha256sum build/NangateOpenCellLibrary_typical.lib > build/library.sha256
+      - name: Synthesize 36 configurations
+        run: python3 scripts/synth.py
+      - name: Record provenance
+        run: |
+          git rev-parse HEAD > build/commit.txt
+          iverilog -V > build/iverilog-version.txt 2>&1
+          yosys -V > build/yosys-version.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hardware-evidence
+          path: |
+            build/*.json
+            build/*.log
+            build/*.sha256
+            build/commit.txt
+            build/*version.txt
+          retention-days: 14
