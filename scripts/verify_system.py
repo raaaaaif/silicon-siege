@@ -87,6 +87,7 @@ initial begin
  $display("PASS");$finish;end
 endmodule'''
      (O/'system_tb.v').write_text(tb)
+     if (p,bits,acc,pipe,prefetch)==(4,8,24,1,1): (O/'synth_tb.v').write_text(tb)
      subprocess.run(['iverilog','-g2012','-s','tb','-o',str(O/'sim'),'rtl/siege_tile.v','rtl/siege_system.v',str(O/'system_tb.v')],check=True,capture_output=True)
      run=subprocess.run(['vvp',str(O/'sim')],text=True,capture_output=True)
      (O/f'{name}.log').write_text(run.stdout+run.stderr)
@@ -96,8 +97,24 @@ endmodule'''
        _,ci,cy,mb,st,rd=line.split();meta[int(ci)].update(cycles=int(cy),mac_beats=int(mb),output_stalls=int(st),read_cycles=int(rd))
      rows.append(dict(p=p,bits=bits,acc=acc,pipe=pipe,prefetch=prefetch,cases=meta));print(name,'PASS',flush=True)
 # Confirm complete subsystem synthesizes; preserve inferred synchronous memories, not fake SRAM area.
-script='read_verilog rtl/siege_tile.v rtl/siege_system.v; hierarchy -top siege_system; proc; opt; memory_dff; memory_collect; check -assert; stat -width; write_json build/depth/system-netlist.json'
+script='read_verilog rtl/siege_tile.v rtl/siege_system.v; hierarchy -top siege_system; proc; opt; memory_dff; memory_collect; opt_clean; check -assert; stat -width; write_json build/depth/system-netlist.json; write_verilog -noattr build/depth/system-synth.v'
 s=subprocess.run(['yosys','-p',script],text=True,capture_output=True);(O/'system-synthesis.log').write_text(s.stdout+s.stderr)
 assert s.returncode==0,s.stdout[-3000:]+s.stderr
-report=dict(schema=1,configurations=len(rows),cases=sum(len(r['cases']) for r in rows),rows=rows,rtl_sha256={f:hashlib.sha256(pathlib.Path('rtl/'+f).read_bytes()).hexdigest() for f in ['siege_tile.v','siege_system.v']},scope='RTL simulation + synthesis with inferred memories. No SRAM macro mapping, AXI integration or physical timing claim for this subsystem.',tool=subprocess.check_output(['iverilog','-V'],text=True,stderr=subprocess.DEVNULL).splitlines()[0])
+# Exercise the synthesized inferred-memory netlist against the same independent scoreboard.
+subprocess.run(['iverilog','-g2012','-s','tb','-o',str(O/'sim-netlist'),str(O/'system-synth.v'),str(O/'synth_tb.v')],check=True,capture_output=True)
+net=subprocess.run(['vvp',str(O/'sim-netlist')],text=True,capture_output=True)
+(O/'system-netlist-simulation.log').write_text(net.stdout+net.stderr)
+assert net.returncode==0,net.stdout+net.stderr
+# The verification environment must detect deliberate integration defects.
+mutations=[]
+original=pathlib.Path('rtl/siege_system.v').read_text()
+for label,before,after in [('stale-prefetch','state==READ ? kk : kk+1','state==READ ? kk : kk'),('wrong-output-index','result_index=(tr+lane/P)*n+tc+lane%P','result_index=(tr+lane/P)*n+tc+lane%P+1')]:
+ assert before in original
+ (O/'mutated.v').write_text(original.replace(before,after))
+ subprocess.run(['iverilog','-g2012','-s','tb','-o',str(O/'sim-mutant'),'rtl/siege_tile.v',str(O/'mutated.v'),str(O/'synth_tb.v')],check=True,capture_output=True)
+ mutant=subprocess.run(['vvp',str(O/'sim-mutant')],text=True,capture_output=True)
+ (O/f'mutation-{label}.log').write_text(mutant.stdout+mutant.stderr)
+ assert mutant.returncode!=0 and 'data case' in mutant.stdout,mutant.stdout
+ mutations.append(dict(defect=label,detected=True))
+report=dict(schema=1,synthesized_netlist_simulation='passed: representative 4x4 INT8 ACC24 pipelined overlap',mutations=mutations,configurations=len(rows),cases=sum(len(r['cases']) for r in rows),rows=rows,rtl_sha256={f:hashlib.sha256(pathlib.Path('rtl/'+f).read_bytes()).hexdigest() for f in ['siege_tile.v','siege_system.v']},scope='RTL simulation + synthesis with inferred memories. No SRAM macro mapping, AXI integration or physical timing claim for this subsystem.',tool=subprocess.check_output(['iverilog','-V'],text=True,stderr=subprocess.DEVNULL).splitlines()[0])
 (O/'system.json').write_text(json.dumps(report,indent=2))
