@@ -1,0 +1,43 @@
+name: Routed pipeline timing ablation
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  route:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        pipe: [0, 1]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare matched 500 MHz experiment
+        env:
+          PIPE: ${{ matrix.pipe }}
+        run: |
+          mkdir -p build/timing
+          python3 - <<'PY'
+          import os,pathlib
+          p=pathlib.Path('build/timing')
+          p.joinpath('siege_tile.v').write_text(pathlib.Path('rtl/siege_tile.v').read_text().replace('PIPE=1, BUG=0','PIPE='+os.environ['PIPE']+', BUG=0'))
+          p.joinpath('constraints.sdc').write_text(pathlib.Path('rtl/constraints.sdc').read_text().replace('-period 10','-period 2').replace('set_input_delay 2','set_input_delay 0.4').replace('set_output_delay 2','set_output_delay 0.4'))
+          p.joinpath('physical.mk').write_text(pathlib.Path('rtl/physical.mk').read_text().replace('/work/rtl/siege_tile.v','/work/build/timing/siege_tile.v').replace('/work/rtl/constraints.sdc','/work/build/timing/constraints.sdc'))
+          PY
+          git rev-parse HEAD > build/timing/commit.txt
+          docker pull openroad/orfs@sha256:ac327587b71c3ce1fea813f4efcf966644daa90c9fadc8f93ee2e4b4c1d64842
+      - name: Route and time the candidate
+        run: docker run --name timing -v "$PWD:/work" -w /OpenROAD-flow-scripts/flow --entrypoint bash openroad/orfs@sha256:ac327587b71c3ce1fea813f4efcf966644daa90c9fadc8f93ee2e4b4c1d64842 -lc 'source /OpenROAD-flow-scripts/env.sh; make DESIGN_CONFIG=/work/build/timing/physical.mk'
+      - name: Collect results including failed timing closure
+        if: always()
+        run: |
+          docker cp timing:/OpenROAD-flow-scripts/flow/logs/nangate45/siege_tile/base/6_report.json build/timing/metrics.json || true
+          docker cp timing:/OpenROAD-flow-scripts/flow/reports/nangate45/siege_tile/base/6_finish.rpt build/timing/timing.rpt || true
+          docker cp timing:/OpenROAD-flow-scripts/flow/reports/nangate45/siege_tile/base/5_route_drc.rpt build/timing/drc.rpt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: timing-pipe-${{ matrix.pipe }}
+          path: build/timing
+          retention-days: 30
