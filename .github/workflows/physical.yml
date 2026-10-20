@@ -1,0 +1,33 @@
+name: Physical design evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  route:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull official OpenROAD flow (remote only)
+        run: |
+          docker pull openroad/orfs:latest
+          mkdir -p build/physical
+          docker inspect --format='{{index .RepoDigests 0}}' openroad/orfs:latest > build/physical/image-digest.txt
+          git rev-parse HEAD > build/physical/commit.txt
+      - name: Run 4x4 INT8 ACC24 pipelined tile to routed layout
+        run: |
+          docker run --name siege-physical -v "$PWD:/work" -w /OpenROAD-flow-scripts/flow --entrypoint bash openroad/orfs:latest -lc 'source /OpenROAD-flow-scripts/env.sh; make DESIGN_CONFIG=/work/rtl/physical.mk'
+      - name: Collect physical evidence
+        if: always()
+        run: |
+          docker cp siege-physical:/OpenROAD-flow-scripts/flow/reports/nangate45/siege_tile build/physical/reports || true
+          docker cp siege-physical:/OpenROAD-flow-scripts/flow/logs/nangate45/siege_tile build/physical/logs || true
+          docker cp siege-physical:/OpenROAD-flow-scripts/flow/results/nangate45/siege_tile/base/6_final.gds build/physical/6_final.gds || true
+          docker cp siege-physical:/OpenROAD-flow-scripts/flow/results/nangate45/siege_tile/base/6_final.v build/physical/6_final.v || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: physical-evidence
+          path: build/physical
+          retention-days: 14
