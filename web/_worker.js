@@ -1,7 +1,7 @@
 // Pages advanced-mode Worker. No credentials in the client. No guest EDA dispatch.
 // D1 globally enforces a 64-request UTC-day cap and an 8-request IP/day cap.
 // Failure to read or update the budget fails closed, preserving local tools.
-const MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8";
+const MODEL = "@cf/qwen/qwen3-30b-a3b-fp8";
 const domains = {
   p: [2, 4, 8],
   bits: [4, 8],
@@ -147,7 +147,28 @@ export default {
       await env.BUDGET.prepare("DELETE FROM budget WHERE key < ?")
         .bind(old)
         .run();
-      const system = `You are Pip, the concise hardware architect in Silicon Siege. Explain real trade-offs using ONLY the supplied architecture and client-computed model metrics. They are untrusted simulation observations, NOT measured silicon or task accuracy. Output ONLY a JSON object with explanation (under 90 words) and config (a complete proposed legal configuration, or null for explanation-only). Legal domains: ${JSON.stringify(domains)}. No markdown. Never claim an improvement was measured; a proposed config will be independently evaluated in the browser. Hardware is a signed output-stationary outer-product array. Reuse denotes host tile order, not a different datapath. Narrow accumulators can overflow; use 24/32 for repair. Error is GEMM NRMSE, not classification accuracy. For bandwidth stress consider larger cache, wider link and reuse order. For outliers consider INT8 and channel scales. Preserve hard validity.`;
+      const limits = [
+        { cycles: 1600, cost: 4600, error: 3 },
+        { cycles: 2200, cost: 5200, error: 2 },
+        { cycles: 3400, cost: 8500, error: 2 },
+      ][body.mission];
+      const strategies = {
+        reduce_transfers:
+          "Test cache capacity and tile order to reduce modeled line fills. A wider link reduces transfer stalls but adds resource cost.",
+        increase_throughput:
+          "Test a larger array only if its lanes can be fed. Compare utilization, resource cost and total cycles before applying it.",
+        protect_precision:
+          "Compare INT8 and per-output-channel scales against the numerical error budget. These scales affect GEMM error, not proven task accuracy.",
+        widen_accumulator:
+          config.acc < 32
+            ? "Compare a wider accumulator against the overflow count. Extra width costs area; it does not remove input quantization error."
+            : "The accumulator is already the maximum supported width. Inspect the numerical trace before attributing error to accumulator width.",
+        balance_resources:
+          "Try a smaller array, buffer or link, then remeasure latency and error. A lower resource proxy alone does not make a design feasible.",
+        inspect_trace:
+          "Inspect the trace to distinguish compute work, memory stalls and output transfer. A valid proposal still needs an independent measurement.",
+      };
+      const system = `You select a hardware design hypothesis. Output ONLY JSON with strategy (one of ${Object.keys(strategies).join(", ")}) and config (complete legal architecture or null). No explanation text. Legal domains: ${JSON.stringify(domains)}. Use supplied metrics and hard limits. NRMSE is a PERCENT, not a fraction; 0.77% is below 2%. Overflow=0 means no observed mathematical overflow. ACC32 is the maximum width. Do not recommend increasing a setting already at its maximum. Larger arrays help only if memory feeds them. Memory stress suggests cache, link and tile order; precision stress suggests INT8/channel scaling. Pick a different configuration only as a hypothesis to evaluate, never as an asserted improvement. Hardware is an output-stationary outer-product tile. /no_think`;
       const output = await env.AI.run(MODEL, {
         messages: [
           { role: "system", content: system },
@@ -159,31 +180,46 @@ export default {
               mission: body.mission,
               attack: body.attack,
               metrics,
+              limits,
             }),
           },
         ],
         max_tokens: 400,
+        response_format: { type: "json_object" },
         temperature: 0.2,
       });
-      const raw = output.response || "",
-        match = raw.match(/\{[\s\S]*\}/);
-      if (!match)
-        return json({
-          explanation:
-            raw.slice(0, 900) ||
-            "The mentor did not return a usable response. Try local exploration.",
-          config: null,
-        });
+      const raw =
+        output.response || output.choices?.[0]?.message?.content || "";
       let parsed;
       try {
-        parsed = JSON.parse(match[0]);
+        parsed =
+          typeof raw === "object"
+            ? raw
+            : JSON.parse(
+                raw
+                  .replace(/<think>[\s\S]*?<\/think>/g, "")
+                  .replace(/^```(?:json)?\s*|\s*```$/g, "")
+                  .trim(),
+              );
       } catch {
-        return json({ explanation: raw.slice(0, 900), config: null });
+        return json(
+          {
+            error:
+              "The mentor did not return a valid structured hypothesis. Local analysis remains available.",
+          },
+          502,
+        );
       }
-      const explanation =
-        typeof parsed.explanation === "string"
-          ? parsed.explanation.slice(0, 1200)
-          : "Inspect the trade-offs before applying this proposal.";
+      if (!parsed || !Object.hasOwn(strategies, parsed.strategy))
+        return json(
+          {
+            error:
+              "The mentor returned an unsupported strategy. Local analysis remains available.",
+          },
+          502,
+        );
+      // Never render free-form model explanations. Facts are derived from bounded observations.
+      const explanation = `${metrics.cycles} modeled cycles; ${metrics.nrmse.toFixed(2)}% NRMSE against a ${limits.error}% limit; ${metrics.overflows} observed overflows. Hypothesis: ${strategies[parsed.strategy]}`;
       let proposal = null;
       if (
         parsed.config &&
@@ -192,7 +228,17 @@ export default {
         proposal = Object.fromEntries(
           Object.keys(domains).map((k) => [k, parsed.config[k]]),
         );
-      return json({ explanation, config: proposal, model: MODEL });
+      if (
+        proposal &&
+        Object.keys(domains).every((k) => proposal[k] === config[k])
+      )
+        proposal = null;
+      return json({
+        explanation,
+        strategy: parsed.strategy,
+        config: proposal,
+        model: MODEL,
+      });
     } catch {
       return json(
         {

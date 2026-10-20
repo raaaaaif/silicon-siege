@@ -12,6 +12,11 @@ import {
   configId,
 } from "./engine.js";
 import { search, SPACE_SIZE } from "./search.js";
+// Avoid a hash anchor or browser scroll restoration hiding the primary navigation.
+history.scrollRestoration = "manual";
+window.addEventListener("pageshow", () =>
+  window.scrollTo({ top: 0, behavior: "instant" }),
+);
 const $ = (s) => document.querySelector(s),
   $$ = (s) => [...document.querySelectorAll(s)],
   fmt = (n, d = 0) =>
@@ -167,7 +172,7 @@ function setView(id) {
   history.replaceState(
     null,
     "",
-    location.pathname + location.search + "#" + id,
+    location.pathname + location.search + "#/" + id,
   );
   window.scrollTo({ top: 0, behavior: "instant" });
 }
@@ -624,7 +629,7 @@ $("#share").onclick = async () => {
   u.search = "";
   u.searchParams.set("design", btoa(JSON.stringify(config)));
   u.searchParams.set("brief", mission);
-  u.hash = "workbench";
+  u.hash = "/workbench";
   showDialog(
     "Share this design",
     `<p>This link contains architecture settings and the design brief. Progress and history stay in this browser.</p><textarea aria-label="Design link" readonly style="width:100%;height:110px">${esc(u.href)}</textarea><button class="button primary" id="copyDesign">Copy design link ↗</button>`,
@@ -652,8 +657,11 @@ async function mentor(question) {
   }
   const btn = $(`[data-question="${question}"]`);
   btn.disabled = true;
+  const context = JSON.stringify([config, mission, attack]);
+  $("#mentorState").textContent = "Pip is evaluating a design hypothesis…";
   try {
     const response = await fetch("/api/mentor", {
+      signal: AbortSignal.timeout(45000),
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -673,6 +681,15 @@ async function mentor(question) {
     });
     const data = await response.json();
     if (!response.ok) throw Error(data.error || "Mentor unavailable");
+    if (context !== JSON.stringify([config, mission, attack])) {
+      log(
+        "verifier",
+        "The design changed while the mentor was thinking. Its stale proposal was discarded; ask again for the current design.",
+      );
+      $("#mentorState").textContent =
+        "Design changed · stale mentor proposal discarded";
+      return;
+    }
     log("architect", data.explanation);
     $("#mentorState").textContent =
       "Cloudflare Workers AI · proposal checked locally";
@@ -862,7 +879,7 @@ async function loadEvidence() {
 }
 refresh();
 renderConvergence([]);
-setView(location.hash.slice(1) || "workbench");
+setView(location.hash.replace(/^#\/?/, "") || "workbench");
 loadEvidence();
 fetch("/api/health")
   .then((r) => r.json())

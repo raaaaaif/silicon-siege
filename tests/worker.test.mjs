@@ -31,7 +31,8 @@ function environment() {
         calls++;
         return {
           response: JSON.stringify({
-            explanation: "Try more bandwidth, then measure it.",
+            strategy: "reduce_transfers",
+            explanation: "Fabricated silicon proves this is 100x faster.",
             config: { ...DEFAULT, bw: 16 },
           }),
         };
@@ -101,7 +102,10 @@ test("worker validates proposals and enforces visitor budget before model invoca
   for (let i = 0; i < 8; i++) {
     const r = await worker.fetch(req(), env);
     assert.equal(r.status, 200);
-    assert.equal((await r.json()).config.bw, 16);
+    const data = await r.json();
+    assert.equal(data.config.bw, 16);
+    assert.match(data.explanation, /0.67% NRMSE against a 3% limit/);
+    assert.ok(!data.explanation.includes("100x"));
   }
   assert.equal((await worker.fetch(req(), env)).status, 429);
   assert.equal(env.calls(), 8);
@@ -113,4 +117,41 @@ test("database failure prevents model calls", async () => {
   };
   assert.equal((await worker.fetch(req(), env)).status, 503);
   assert.equal(env.calls(), 0);
+});
+test("invalid cloud strategies and architectures never become executable proposals", async () => {
+  const env = environment();
+  env.AI.run = async () => ({
+    choices: [
+      {
+        message: {
+          content: JSON.stringify({
+            strategy: "invent_silicon",
+            config: DEFAULT,
+          }),
+        },
+      },
+    ],
+  });
+  assert.equal((await worker.fetch(req(), env)).status, 502);
+  env.AI.run = async () => ({
+    choices: [
+      {
+        message: {
+          content: JSON.stringify({
+            strategy: "protect_precision",
+            config: { ...DEFAULT, p: 900 },
+          }),
+        },
+      },
+    ],
+  });
+  const data = await (await worker.fetch(req(), env)).json();
+  assert.equal(data.config, null);
+  assert.equal(data.strategy, "protect_precision");
+  env.AI.run = async () => ({
+    response: { strategy: "reduce_transfers", config: { ...DEFAULT, bw: 16 } },
+  });
+  const objectResponse = await (await worker.fetch(req(), env)).json();
+  assert.equal(objectResponse.config.bw, 16);
+  assert.match(objectResponse.explanation, /0.67%/);
 });

@@ -1,5 +1,7 @@
 # Silicon Siege
 
+[Open the live lab](https://silicon-siege.pages.dev/) · [Browse the source](https://github.com/raaaaaif/silicon-siege)
+
 An interactive, adversarial accelerator-design lab bridging digital ECE, computer architecture and machine learning. Change a streaming integer GEMM tile, inspect its clock-by-clock behavior, search a constrained design space, and challenge the result with bandwidth starvation, outliers, ragged shapes and overflow. A restrained pixel-art circuit island makes the mechanics approachable; experiments and downloadable hardware evidence are the core of the project.
 
 ## Run locally
@@ -18,7 +20,7 @@ Cloud mentor calls are disabled on the local static server. Simulation, adaptive
 
 - **Digital ECE:** parameterized signed 2×2 / 4×4 / 8×8 streaming outer-product RTL, INT4/INT8 operands, 16/24/32-bit modular accumulators, optional product register, bubbles, reset and ready/valid backpressure.
 - **Architecture:** exact tile control plus an explicitly separate host/cache/transfer model. Inspect MAC activity, memory stalls, utilization, tile ordering and accumulator contents. Cell area comes from a 36-configuration Yosys/Nangate45 synthesis sweep; the resource budget is a transparent proxy.
-- **ML:** seeded floating-point versus quantized GEMM, per-tensor/per-output-channel scaling, overflow detection, adaptive RBF surrogate exploration, and equal-budget random/heuristic baselines. Cloudflare Workers AI proposes explanations or legal designs; every proposal is evaluated locally before application.
+- **ML:** seeded floating-point versus quantized GEMM, per-tensor/per-output-channel scaling, overflow detection, adaptive RBF surrogate exploration, and equal-budget random/heuristic baselines. Cloudflare Workers AI chooses a typed design strategy and optional architecture; numeric explanations come from checked observations, and every proposal is evaluated locally before application.
 - **Verification:** 36 RTL configurations × 48 tiles, 49,344 checked edges, the same independent Python stimulus replayed against the browser core, two detected intentional defects, and 20-cycle bounded formal control checks on one small configuration.
 - **Physical design:** a representative 4×4 INT8 ACC24 registered tile through OpenROAD placement, clock-tree synthesis, detailed routing and GDS. Exact timing, physical metrics, layout and run provenance are published in `web/evidence/`.
 
