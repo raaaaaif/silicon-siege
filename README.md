@@ -10,6 +10,8 @@ An interactive, adversarial accelerator-design lab bridging digital ECE, compute
 
 ## System lab: from trained model to accelerator RTL
 
+![Live trained-model and hardware inspection](docs/screenshots/system-lab.jpg)
+
 [Open the System lab](https://silicon-siege.pages.dev/#/lab). Edit a real held-out digit, switch precision and accumulator width, inspect exact integer tensors, and compare a serialized versus overlapped operand schedule. A constrained architect enumerates 96 configurations using validation accuracy, measured MAC-tile area and RTL-checked clocks; held-out test labels do not participate in selection.
 
 - **Actual ML:** newly trained 64→32→10 MLP, official UCI writer-separated test set, disjoint fitting/calibration/validation, static INT4/INT8 PTQ, integer bias/ReLU/Q20 requantization, accuracy intervals and confusion matrices. All 21,564 held-out integer predictions match the independent NumPy path.
